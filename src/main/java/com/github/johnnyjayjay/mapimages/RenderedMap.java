@@ -1,0 +1,193 @@
+package com.github.johnnyjayjay.mapimages;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
+
+/**
+ * A class representing a {@link MapView} with a storage, renderers and some convenience methods.
+ *
+ * @see MapBuilder
+ * @see RenderedMap#create(MapView, MapStorage)
+ * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
+ */
+public class RenderedMap implements MapView {
+
+    private final MapView view;
+    private final MapStorage storage;
+
+    private RenderedMap(MapView view, MapStorage storage) {
+        this.view = view;
+        this.storage = storage;
+        view.getRenderers().forEach((renderer) -> storage.store(view.getId(), renderer));
+    }
+
+    /**
+     * Creates a default instance of this class with the renderers set in the {@link MapView} argument.
+     *
+     * @param view A user-specific {@link MapView} that is used as the base of this instance.
+     * @param storage A storage to keep track of the renderers or {@code null} if this {@link RenderedMap}
+     *                should not store its renderers.
+     * @return A never-null instance of {@link RenderedMap}.
+     */
+    @NotNull
+    public static RenderedMap create(@NotNull MapView view, @Nullable MapStorage storage) {
+        MapStorage effectiveStorage = storage == null ? new MapStorage() {
+            @Override
+            public void remove(int mapId, MapRenderer renderer) {}
+            @Override
+            public void store(int mapId, MapRenderer renderer) {}
+            @Override
+            public List<MapRenderer> provide(int mapId) {
+                return null;
+            }
+        } : storage;
+        return new RenderedMap(view, effectiveStorage);
+    }
+
+    /**
+     * Creates a copy of this map. The copy will use a different {@link MapView} with this map's renderers.
+     * The copy will use the same world, if it is present, otherwise it will choose one randomly. Finally, the copy
+     * will use the same {@link MapStorage} as this map.
+     *
+     * @return a copy of this map.
+     */
+    @NotNull
+    public RenderedMap createCopy() {
+        return MapBuilder.create()
+                .addRenderers(view.getRenderers())
+                .store(storage)
+                .world(view.getWorld())
+                .build();
+    }
+
+    /**
+     * Adds a renderer to this map and stores it in the storage, if one is present.
+     *
+     * @param renderer The {@link MapRenderer} to add.
+     */
+    public void addRenderer(@NotNull MapRenderer renderer) {
+        storage.store(view.getId(), renderer);
+        view.addRenderer(renderer);
+    }
+
+    /**
+     * Removes a renderer from this map and from the storage, if one is present.
+     *
+     * @param renderer The {@link MapRenderer} to remove.
+     */
+    public boolean removeRenderer(MapRenderer renderer) {
+        storage.remove(view.getId(), renderer);
+        return view.removeRenderer(renderer);
+    }
+
+    @Override
+    public boolean isUnlimitedTracking() {
+        return view.isUnlimitedTracking();
+    }
+
+    @Override
+    public void setUnlimitedTracking(boolean b) {
+        view.setUnlimitedTracking(b);
+    }
+
+    /**
+     * Returns the renderers set for this map.
+     *
+     * @return A never-null and immutable List containing the renderers.
+     */
+    @NotNull
+    public List<MapRenderer> getRenderers() {
+        return Collections.unmodifiableList(view.getRenderers());
+    }
+
+    /**
+     * Returns the renderers of this map as a {@link Stream}.
+     *
+     * @return The renderer list, streamed.
+     */
+    @NotNull
+    public Stream<MapRenderer> streamRenderers() {
+        return view.getRenderers().stream();
+    }
+
+    /**
+     * Returns the identifier of the underlying {@link MapView}.
+     *
+     * @return The map id.
+     */
+    public int getId() {
+        return view.getId();
+    }
+
+    @Override
+    public boolean isVirtual() {
+        return view.isVirtual();
+    }
+
+    @NotNull
+    @Override
+    public Scale getScale() {
+        return view.getScale();
+    }
+
+    @Override
+    public void setScale(@NotNull Scale scale) {
+        view.setScale(scale);
+    }
+
+    @Override
+    public int getCenterX() {
+        return view.getCenterX();
+    }
+
+    @Override
+    public int getCenterZ() {
+        return view.getCenterZ();
+    }
+
+    @Override
+    public void setCenterX(int i) {
+        view.setCenterX(i);
+    }
+
+    @Override
+    public void setCenterZ(int i) {
+        view.setCenterZ(i);
+    }
+
+    @Nullable
+    @Override
+    public World getWorld() {
+        return view.getWorld();
+    }
+
+    @Override
+    public void setWorld(@NotNull World world) {
+        view.setWorld(world);
+    }
+
+    /**
+     * Creates and returns an {@link ItemStack} of the type {@code Material.MAP} associated with this instance's
+     * underlying {@link MapView}.
+     *
+     * @return A freshly created ItemStack.
+     */
+    public ItemStack createItemStack() {
+        MapMeta mapMeta = (MapMeta) Bukkit.getItemFactory().getItemMeta(Material.MAP);
+        mapMeta.setMapView(view);
+        ItemStack itemStack = new ItemStack(Material.MAP);
+        itemStack.setItemMeta(mapMeta);
+        return itemStack;
+    }
+}
