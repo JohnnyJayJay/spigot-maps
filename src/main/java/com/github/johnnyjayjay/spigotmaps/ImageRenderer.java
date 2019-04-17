@@ -45,7 +45,27 @@ public class ImageRenderer extends AbstractMapRenderer {
         return new Point(startingPoint);
     }
 
+    /**
+     * Creates a new {@link ImageRenderer} that renders a specific image for the specified players
+     * or everyone if none are specified..
+     *
+     * @param image the image to render.
+     * @param players the players to render for.
+     * @return a never-null instance of {@link ImageRenderer}.
+     */
+    @NotNull
+    public static ImageRenderer create(@NotNull BufferedImage image, @NotNull Player... players) {
+        return builder().image(image).addPlayers(players).build();
+    }
 
+    /**
+     * Creates a new {@link ImageRenderer} that renders a single color onto a map for the specified players
+     * or everybody if none are specified.
+     *
+     * @param color the color to use.
+     * @param players the players to render for.
+     * @return a never-null instance of {@link ImageRenderer}.
+     */
     @NotNull
     public static ImageRenderer createSingleColorRenderer(Color color, Player... players) {
         return builder().image(ImageTools.createSingleColoredImage(color)).addPlayers(players).build();
