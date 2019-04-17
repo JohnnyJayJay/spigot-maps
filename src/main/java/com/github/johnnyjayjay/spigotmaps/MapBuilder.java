@@ -1,4 +1,4 @@
-package com.github.johnnyjayjay.mapimages;
+package com.github.johnnyjayjay.spigotmaps;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;

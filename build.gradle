@@ -1,10 +1,9 @@
 plugins {
     id 'java'
-    id 'maven'
 }
 
 group 'com.github.johnnyjayjay'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 sourceCompatibility = 1.8
 
@@ -16,7 +15,6 @@ repositories {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {

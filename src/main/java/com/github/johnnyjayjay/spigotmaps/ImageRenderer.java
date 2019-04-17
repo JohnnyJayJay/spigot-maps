@@ -1,9 +1,10 @@
-package com.github.johnnyjayjay.mapimages;
+package com.github.johnnyjayjay.spigotmaps;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.Set;
 import java.util.function.Predicate;
