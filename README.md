@@ -1,7 +1,7 @@
 # Spigot-Maps
 
-[![Release](https://jitpack.io/v/User/Repo.svg)] [Docs](https://javadoc.jitpack.io/com/github/johnnyjayjay/spigot-maps/master-SNAPSHOT/javadoc/index.html)
-(https://jitpack.io/#User/Repo)
+[![Release](https://jitpack.io/v/User/Repo.svg)] 
+[JavaDoc](https://javadoc.jitpack.io/com/github/johnnyjayjay/spigot-maps/master-SNAPSHOT/javadoc/index.html)
 
 A small library that makes the use of customised maps in Spigot very easy.
 
