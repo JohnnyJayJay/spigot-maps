@@ -3,6 +3,7 @@ package com.github.johnnyjayjay.mapimages;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
@@ -35,10 +36,10 @@ public class RenderedMap implements MapView {
     /**
      * Creates a default instance of this class with the renderers set in the {@link MapView} argument.
      *
-     * @param view A user-specific {@link MapView} that is used as the base of this instance.
-     * @param storage A storage to keep track of the renderers or {@code null} if this {@link RenderedMap}
+     * @param view a user-specific {@link MapView} that is used as the base of this instance.
+     * @param storage a storage to keep track of the renderers or {@code null} if this {@link RenderedMap}
      *                should not store its renderers.
-     * @return A never-null instance of {@link RenderedMap}.
+     * @return a never-null instance of {@link RenderedMap}.
      */
     @NotNull
     public static RenderedMap create(@NotNull MapView view, @Nullable MapStorage storage) {
@@ -74,7 +75,7 @@ public class RenderedMap implements MapView {
     /**
      * Adds a renderer to this map and stores it in the storage, if one is present.
      *
-     * @param renderer The {@link MapRenderer} to add.
+     * @param renderer the {@link MapRenderer} to add.
      */
     public void addRenderer(@NotNull MapRenderer renderer) {
         storage.store(view.getId(), renderer);
@@ -84,7 +85,7 @@ public class RenderedMap implements MapView {
     /**
      * Removes a renderer from this map and from the storage, if one is present.
      *
-     * @param renderer The {@link MapRenderer} to remove.
+     * @param renderer the {@link MapRenderer} to remove.
      */
     public boolean removeRenderer(MapRenderer renderer) {
         storage.remove(view.getId(), renderer);
@@ -104,7 +105,7 @@ public class RenderedMap implements MapView {
     /**
      * Returns the renderers set for this map.
      *
-     * @return A never-null and immutable List containing the renderers.
+     * @return a never-null and immutable List containing the renderers.
      */
     @NotNull
     public List<MapRenderer> getRenderers() {
@@ -114,7 +115,7 @@ public class RenderedMap implements MapView {
     /**
      * Returns the renderers of this map as a {@link Stream}.
      *
-     * @return The renderer list, streamed.
+     * @return the renderer list, streamed.
      */
     @NotNull
     public Stream<MapRenderer> streamRenderers() {
@@ -124,7 +125,7 @@ public class RenderedMap implements MapView {
     /**
      * Returns the identifier of the underlying {@link MapView}.
      *
-     * @return The map id.
+     * @return the map id.
      */
     public int getId() {
         return view.getId();
@@ -181,7 +182,7 @@ public class RenderedMap implements MapView {
      * Creates and returns an {@link ItemStack} of the type {@code Material.MAP} associated with this instance's
      * underlying {@link MapView}.
      *
-     * @return A freshly created ItemStack.
+     * @return a freshly created ItemStack.
      */
     public ItemStack createItemStack() {
         MapMeta mapMeta = (MapMeta) Bukkit.getItemFactory().getItemMeta(Material.MAP);
@@ -189,5 +190,15 @@ public class RenderedMap implements MapView {
         ItemStack itemStack = new ItemStack(Material.MAP);
         itemStack.setItemMeta(mapMeta);
         return itemStack;
+    }
+
+    /**
+     * Creates an {@link ItemStack} using {@link this#createItemStack()} and adds it to a player's inventory.
+     *
+     * @param player the player to give the item to.
+     */
+    public void give(Player player) {
+        player.getInventory().addItem(createItemStack());
+        player.updateInventory();
     }
 }

@@ -12,6 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
+ * Listens for {@link MapInitializeEvent}s and assigns the renderers provided by a {@link MapStorage}
+ * for the subject {@link MapView} of this event, if registered.
+ *
+ * If you do not want or need your map renderers to be persistent, you need not use this class.
+ *
+ * @see InitializationListener#register(MapStorage, Plugin)
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  */
 public final class InitializationListener implements Listener {
