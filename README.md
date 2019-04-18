@@ -5,6 +5,15 @@
 
 A small library that makes the use of customised maps in Spigot very easy.
 
+## Features
+- Dynamic map rendering (based on render context)
+- Text and image rendering with convenient usage
+- Base class for own renderer implementations
+- API to store renderers persistently
+- Tools to resize / crop / divide images so that they fit the minecraft maps
+- Convenient builder classes and factory methods
+- Implementation of MapView to use directly with the Spigot API
+
 ## Add as dependency
 
 ### Maven
