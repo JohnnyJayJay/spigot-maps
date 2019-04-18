@@ -1,8 +1,5 @@
 package com.github.johnnyjayjay.spigotmaps;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,11 +28,11 @@ public final class ImageTools {
      * Tries to read an image from a URL using an explicit user-agent.
      * This might be useful to avoid 401 - Unauthorized responses.
      *
-     * @param url a URL to fetch the image from.
+     * @param url a non-{@code null} URL to fetch the image from.
      * @return the image or {@code null} if no image could be created.
      * @throws IOException see {@link ImageIO#read(URL)}.
      */
-    public static BufferedImage loadWithUserAgentFrom(@NotNull URL url) throws IOException {
+    public static BufferedImage loadWithUserAgentFrom(URL url) throws IOException {
         URLConnection connection = url.openConnection();
         connection.addRequestProperty("User-Agent", "Mozilla/5.0");
         try (InputStream inputStream = connection.getInputStream()) {
@@ -44,13 +41,13 @@ public final class ImageTools {
     }
 
     /**
-     * Creates a {@link BufferedImage} with the size of {@link this#MINECRAFT_MAP_SIZE}.
+     * Creates a {@link BufferedImage} with the size of {@link #MINECRAFT_MAP_SIZE}.
      * The whole image will have one color. This can be used as a background for {@link TextRenderer}s, for example.
      *
-     * @param color the {@link Color} this image will have.
+     * @param color the non-{@code null} {@link Color} this image will have.
      * @return a never-null image.
      */
-    public static BufferedImage createSingleColoredImage(@NotNull Color color) {
+    public static BufferedImage createSingleColoredImage(Color color) {
         BufferedImage image = new BufferedImage(MINECRAFT_MAP_SIZE.width, MINECRAFT_MAP_SIZE.height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = image.createGraphics();
         graphics.setPaint(color);
@@ -60,12 +57,12 @@ public final class ImageTools {
     }
 
     /**
-     * Resizes an image to the size specified in {@link this#MINECRAFT_MAP_SIZE}.
+     * Resizes an image to the size specified in {@link #MINECRAFT_MAP_SIZE}.
      *
-     * @param image the image to resize.
+     * @param image the non-{@code null} image to resize.
      * @return a new image with the according size.
      */
-    public static BufferedImage resizeToMapSize(@NotNull BufferedImage image) {
+    public static BufferedImage resizeToMapSize(BufferedImage image) {
         Dimension size = MINECRAFT_MAP_SIZE;
         BufferedImage resized = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = resized.createGraphics();
@@ -78,23 +75,22 @@ public final class ImageTools {
      * Takes an image and resizes it in such a way that the parts returned by  this method can be put together
      * to form the whole image.
      * The result will then be a square image and the parts will all be of the size specified in
-     * {@link this#MINECRAFT_MAP_SIZE}.
+     * {@link #MINECRAFT_MAP_SIZE}.
      *
      * The algorithm will make a square version of the image argument first and then divide it into parts.
      *
-     * @param image The image to be divided.
+     * @param image the non-{@code null} image to be divided.
      * @param crop true, if the image should be cropped to a square part in the middle (i.e. the image will not be
      *             resized) or false, if the image should be resized (i.e. the whole image will be visible,
      *             but compressed to 1:1).
      * @return a never-null 2-dimensional array of images. The outer index represents a row, the inner
      *         one a column in the square arrangement of parts.
      */
-    public static BufferedImage[][] resizeIntoMapSizedParts(@NotNull BufferedImage image, boolean crop) {
+    public static BufferedImage[][] resizeIntoMapSizedParts(BufferedImage image, boolean crop) {
         return divideIntoParts(crop ? cropToMapDividableSquare(image) : scaleToMapDividableSquare(image));
     }
 
-    @NotNull
-    private static BufferedImage[][] divideIntoParts(@NotNull BufferedImage image) {
+    private static BufferedImage[][] divideIntoParts(BufferedImage image) {
         Dimension partSize = MINECRAFT_MAP_SIZE;
         int linearParts = image.getWidth() / partSize.width;
         BufferedImage[][] result = new BufferedImage[linearParts][linearParts];
@@ -106,8 +102,7 @@ public final class ImageTools {
         return result;
     }
 
-    @NotNull
-    private static BufferedImage scaleToMapDividableSquare(@NotNull BufferedImage image) {
+    private static BufferedImage scaleToMapDividableSquare(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
         int measure = width > height ? width + (width % MINECRAFT_MAP_SIZE.width) : height + (height % MINECRAFT_MAP_SIZE.height);
@@ -118,8 +113,7 @@ public final class ImageTools {
         return squared;
     }
 
-    @NotNull
-    private static BufferedImage cropToMapDividableSquare(@NotNull BufferedImage image) {
+    private static BufferedImage cropToMapDividableSquare(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
         int measure = width > height
@@ -132,10 +126,10 @@ public final class ImageTools {
      * Creates a copy of a given {@link BufferedImage} by creating a new one and populating
      * it with the content of the old one.
      *
-     * @param image the image to make a copy of.
+     * @param image the non-{@code null} image to make a copy of.
      * @return a copy of the image.
      */
-    public static BufferedImage copyOf(@NotNull BufferedImage image) {
+    public static BufferedImage copyOf(BufferedImage image) {
         BufferedImage copy = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
         Graphics2D graphics = copy.createGraphics();
         graphics.drawImage(image, 0, 0, null);

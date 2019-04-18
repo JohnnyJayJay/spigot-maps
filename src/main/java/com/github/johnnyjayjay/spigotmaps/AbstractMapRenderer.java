@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,13 +17,13 @@ import java.util.stream.Stream;
 
 /**
  * The base class for {@link MapRenderer} implementations by this library.
- *
- * @implNote Extending classes should provide a nested Builder class, which, in turn, extends
+ * <p>
+ * Extending classes should provide a nested Builder class, which, in turn, extends
  * the abstract nested {@link Builder} provided by this class.
  *
+ * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  * @see ImageRenderer
  * @see TextRenderer
- * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  */
 public abstract class AbstractMapRenderer extends MapRenderer {
 
@@ -62,18 +61,18 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      *
      * @return a Set.
      */
-    public @NotNull Set<Player> getRemainingPlayers() {
+    public Set<Player> getRemainingPlayers() {
         return Collections.unmodifiableSet(receivers);
     }
 
     /**
-     * Similar to {@link this#getRemainingPlayers()}, but returns a {@link Stream} to work with.
+     * Similar to {@link #getRemainingPlayers()}, but returns a {@link Stream} to work with.
      * Useful if you want to operate on the remaining players and want to avoid the overhead of
      * creating an immutable set.
      *
      * @return a Stream of the remaining players.
      */
-    public @NotNull Stream<Player> streamRemainingPlayers() {
+    public Stream<Player> streamRemainingPlayers() {
         return receivers.stream();
     }
 
@@ -83,30 +82,30 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      *
      * @return a Set.
      */
-    public @NotNull Set<UUID> getInitialReceivers() {
+    public Set<UUID> getInitialReceivers() {
         return Collections.unmodifiableSet(initialReceivers);
     }
 
     /**
-     * Similar to {@link this#getInitialReceivers()}, but as a {@link Stream}.
+     * Similar to {@link #getInitialReceivers()}, but as a {@link Stream}.
      *
      * @return a Stream of UUIDs belonging to the players this renderer was originally created for.
      */
-    public @NotNull Stream<UUID> streamInitialReceivers() {
+    public Stream<UUID> streamInitialReceivers() {
         return initialReceivers.stream();
     }
 
     /**
      * Renders the map after the preconditions have passed, i.e.:
      * <ul>
-     *     <li>The predicate's test was successful</li>
-     *     <li>This renderer applies to the player or</li>
-     *     <li>This renderer renders maps for all players</li>
+     * <li>The predicate's test was successful</li>
+     * <li>This renderer applies to the player or</li>
+     * <li>This renderer renders maps for all players</li>
      * </ul>
      *
      * @param context the context for this rendering operation.
      */
-    protected abstract void render(@NotNull RenderContext context);
+    protected abstract void render(RenderContext context);
 
     /**
      * The base Builder class for children of {@link AbstractMapRenderer}.
@@ -123,12 +122,13 @@ public abstract class AbstractMapRenderer extends MapRenderer {
 
         /**
          * Returns an instance of the renderer the builder is made for.
+         * <p>
+         * The {@link #check() check method} of this class as
+         * well as any other checks to avoid illegal settings should be called before building instances of this class.
          *
-         * @implNote The {@link this#check() check method} of this class as
-         *           well as any other checks to avoid illegal settings should be called before building.
          * @return a never-null instance.
          */
-        public abstract @NotNull T build();
+        public abstract T build();
 
         /**
          * Checks whether the precondition is null. Should be called when building instances of {@link AbstractMapRenderer}.
@@ -139,39 +139,39 @@ public abstract class AbstractMapRenderer extends MapRenderer {
 
         /**
          * Adds a {@link Collection} of players to the set of players this renderer will apply for.
-         *
+         * <p>
          * Not adding any players will result in a renderer that renders the map for every player.
          *
-         * @param players a collection of players. May be empty.
+         * @param players a collection of players. May be empty, but not {@code null}.
          * @return this.
          */
-        public @NotNull U addPlayers(@NotNull Collection<Player> players) {
+        public U addPlayers(Collection<Player> players) {
             this.receivers.addAll(players);
             return (U) this;
         }
 
         /**
          * Adds zero or more players for whom this renderer should apply.
-         *
+         * <p>
          * Not adding any players will result in a renderer that renders the map for every player.
          *
-         * @param players 0-n players or an array of players to add.
+         * @param players 0-n players or an array of players to add. Must not be {@code null}.
          * @return this.
          */
-        public @NotNull U addPlayers(@NotNull Player... players) {
+        public U addPlayers(Player... players) {
             return this.addPlayers(Arrays.asList(players));
         }
 
         /**
          * Sets a {@link Predicate} that will be tested before every attempt to render the map.
          * If the test fails, this renderer will not render the map.
+         * <p>
+         * This is an optional setting, the default predicate always returns {@code true}.
          *
-         * This is an optional setting, the default value is {@code (context} -> true}.
-         *
-         * @param precondition a {@link Predicate} that tests a {@link RenderContext}.
+         * @param precondition a non-{@code null} {@link Predicate} that tests a {@link RenderContext}.
          * @return this.
          */
-        public @NotNull U precondition(@NotNull Predicate<RenderContext> precondition) {
+        public U precondition(Predicate<RenderContext> precondition) {
             this.precondition = precondition;
             return (U) this;
         }

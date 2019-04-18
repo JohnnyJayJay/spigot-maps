@@ -1,7 +1,6 @@
 package com.github.johnnyjayjay.spigotmaps;
 
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -28,7 +27,7 @@ public class ImageRenderer extends AbstractMapRenderer {
     }
 
     @Override
-    protected void render(@NotNull RenderContext context) {
+    protected void render(RenderContext context) {
         context.getCanvas().drawImage(startingPoint.x, startingPoint.y, image);
     }
 
@@ -51,10 +50,10 @@ public class ImageRenderer extends AbstractMapRenderer {
      * or everyone if none are specified..
      *
      * @param image   the image to render.
-     * @param players the players to render for.
+     * @param players the players to render for. Must not be {@code null}.
      * @return a never-null instance of {@link ImageRenderer}.
      */
-    public static ImageRenderer create(BufferedImage image, @NotNull Player... players) {
+    public static ImageRenderer create(BufferedImage image, Player... players) {
         return builder().image(image).addPlayers(players).build();
     }
 
@@ -63,10 +62,10 @@ public class ImageRenderer extends AbstractMapRenderer {
      * or everybody if none are specified.
      *
      * @param color   the color to use.
-     * @param players the players to render for.
+     * @param players the players to render for. Must not be {@code null}.
      * @return a never-null instance of {@link ImageRenderer}.
      */
-    public static ImageRenderer createSingleColorRenderer(Color color, @NotNull Player... players) {
+    public static ImageRenderer createSingleColorRenderer(Color color, Player... players) {
         return builder().image(ImageTools.createSingleColoredImage(color)).addPlayers(players).build();
     }
 
@@ -123,11 +122,11 @@ public class ImageRenderer extends AbstractMapRenderer {
          * <p>
          * This is a required setting.
          *
-         * @param image the {@link BufferedImage} to draw.
+         * @param image the non-{@code null} {@link BufferedImage} to draw.
          * @return this.
          * @see ImageTools
          */
-        public Builder image(@NotNull BufferedImage image) {
+        public Builder image(BufferedImage image) {
             this.image = ImageTools.copyOf(image);
             return this;
         }
@@ -140,11 +139,11 @@ public class ImageRenderer extends AbstractMapRenderer {
          * <p>
          * This is not required. By default, it will start drawing from the upper left corner (0, 0).
          *
-         * @param point a {@link Point} representing the coordinates, i.e. where to begin drawing.
+         * @param point a non-{@code null} {@link Point} representing the coordinates, i.e. where to begin drawing.
          * @return this.
          * @see ImageTools#MINECRAFT_MAP_SIZE
          */
-        public Builder startingPoint(@NotNull Point point) {
+        public Builder startingPoint(Point point) {
             this.startingPoint = new Point(point);
             return this;
         }

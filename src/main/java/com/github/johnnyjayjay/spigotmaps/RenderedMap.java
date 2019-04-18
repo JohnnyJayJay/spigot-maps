@@ -8,8 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,10 +56,10 @@ public class RenderedMap implements MapView {
     /**
      * Creates a simple instance of {@link RenderedMap} just taking the provided renderers.
      *
-     * @param renderers 0-n renderers that should apply to this map.
+     * @param renderers 0-n renderers that should apply to this map. Must not be {@code null}.
      * @return a never-null RenderedMap.
      */
-    public static RenderedMap create(@NotNull MapRenderer... renderers) {
+    public static RenderedMap create(MapRenderer... renderers) {
         return MapBuilder.create().addRenderers(renderers).build();
     }
 
@@ -190,9 +188,9 @@ public class RenderedMap implements MapView {
      * Creates and returns an {@link ItemStack} of the type {@code Material.MAP} associated with this instance's
      * underlying {@link MapView}.
      *
-     * @return a freshly created ItemStack.
+     * @return a freshly created, never-{@code null} ItemStack.
      */
-    public @NotNull ItemStack createItemStack() {
+    public ItemStack createItemStack() {
         MapMeta mapMeta = (MapMeta) Bukkit.getItemFactory().getItemMeta(Material.MAP);
         mapMeta.setMapView(view);
         ItemStack itemStack = new ItemStack(Material.MAP);
@@ -201,11 +199,11 @@ public class RenderedMap implements MapView {
     }
 
     /**
-     * Creates an {@link ItemStack} using {@link this#createItemStack()} and adds it to a player's inventory.
+     * Creates an {@link ItemStack} using {@link #createItemStack()} and adds it to a player's inventory.
      *
-     * @param player the player to give the item to.
+     * @param player the player to give the item to. Must not be {@code null}.
      */
-    public void give(@NotNull Player player) {
+    public void give(Player player) {
         player.getInventory().addItem(createItemStack());
         player.updateInventory();
     }

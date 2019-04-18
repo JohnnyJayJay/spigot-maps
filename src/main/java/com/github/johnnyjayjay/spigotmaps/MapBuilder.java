@@ -4,8 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,11 +85,11 @@ public class MapBuilder {
      *
      * Without setting any renderer, the map will have no renderers.
      *
-     * @see this#addRenderers(List)
+     * @see #addRenderers(List)
      * @param renderers One or more renderers, or a non-null array of renderers.
      * @return this.
      */
-    public MapBuilder addRenderers(@NotNull MapRenderer... renderers) {
+    public MapBuilder addRenderers(MapRenderer... renderers) {
         return addRenderers(Arrays.asList(renderers));
     }
 

@@ -3,7 +3,6 @@ package com.github.johnnyjayjay.spigotmaps;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapFont;
 import org.bukkit.map.MinecraftFont;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class TextRenderer extends AbstractMapRenderer {
     }
 
     @Override
-    protected void render(@NotNull RenderContext context) {
+    protected void render(RenderContext context) {
         context.getCanvas().drawText(startingPoint.x, startingPoint.y, font, text);
     }
 
@@ -65,10 +64,10 @@ public class TextRenderer extends AbstractMapRenderer {
     /**
      * Creates a {@link TextRenderer} that renders the given lines of text onto a map.
      *
-     * @param lines 0-n Strings or an array of Strings to use as the lines.
+     * @param lines 0-n Strings or an array of Strings to use as the lines. Must not be {@code null}.
      * @return a new, never-null instance of {@link TextRenderer}.
      */
-    public static TextRenderer create(@NotNull String... lines) {
+    public static TextRenderer create(String... lines) {
         return builder().addLines(lines).build();
     }
 
@@ -139,7 +138,7 @@ public class TextRenderer extends AbstractMapRenderer {
          * @param lines 0-n Strings or an array of Strings. Must not be {@code null}.
          * @return this.
          */
-        public Builder addLines(@NotNull String... lines) {
+        public Builder addLines(String... lines) {
             return addLines(Arrays.asList(lines));
         }
 

@@ -3,7 +3,6 @@ package com.github.johnnyjayjay.spigotmaps;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * A container class for every map rendering operation. It contains the subject
@@ -33,7 +32,6 @@ public class RenderContext {
      * @param player the {@link Player} this map is being rendered for.
      * @return a never-null instance of {@link RenderContext}.
      */
-    @NotNull
     public static RenderContext create(MapView mapView, MapCanvas mapCanvas, Player player) {
         Checks.checkNotNull(mapView, "MapView");
         Checks.checkNotNull(mapCanvas, "MapCanvas");
