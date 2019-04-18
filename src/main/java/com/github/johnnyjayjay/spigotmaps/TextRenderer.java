@@ -27,9 +27,9 @@ public class TextRenderer extends AbstractMapRenderer {
     private TextRenderer(
             Set<Player> receivers,
             Predicate<RenderContext> precondition,
-            @NotNull String text,
-            @NotNull Point startingPoint,
-            @NotNull MapFont font) {
+            String text,
+            Point startingPoint,
+            MapFont font) {
         super(receivers, precondition);
         this.text = text;
         this.startingPoint = startingPoint;
