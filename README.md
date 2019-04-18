@@ -46,7 +46,7 @@ You've got various options when creating renderers and maps:
 
 ```java
 BufferedImage catImage = ImageIO.read(file); // read an image from a source, e.g. a file
-catImage = ImageTools.resizeToMapSize(catImage); // resize the image
+catImage = ImageTools.resizeToMapSize(catImage); // resize the image to the minecraft map size
 ImageRenderer catRenderer = ImageRenderer.builder()
         .addPlayers(player1, player2) // set the players this map should be rendered to (omitting this means it renders for everyone)
         .image(catImage) // set the image to render
@@ -65,7 +65,7 @@ RenderedMap map = MapBuilder.create() // make a new builder
         .addRenderers(catRenderer, messageRenderer) // add the renderers to this map
         .world(player1.getWorld()) // set the world this map is bound to, e.g. the world of the target player
         .build(); // build the map
-        
+
 ItemStack mapItem = map.createItemStack(); // get an ItemStack from this map to work with
 ```
 
@@ -112,12 +112,12 @@ BufferedImage[][] parts = ImageTools.resizeIntoMapSizedParts(image, true);
 To turn these into map items:
 
 ```java
-ItemStack[][] maps = Arrays,stream(parts).map(
-        (part) -> Arrays.stream(part)
-                .map(ImageRenderer::create)
-                .map(RenderedMap::create)
-                .map(RenderedMap::createItemStack)
-                .toArray(ItemStack[]::new)
+ItemStack[][] maps = Arrays.stream(parts).map(
+        (part) -> Arrays.stream(part)
+                .map(ImageRenderer::create)
+                .map(RenderedMap::create)
+                .map(RenderedMap::createItemStack)
+                .toArray(ItemStack[]::new)
 ).toArray(ItemStack[][]::new);
 ```
 
@@ -128,12 +128,8 @@ ItemStack[][] maps = new ItemStack[parts.length][];
 for (int row = 0; row < parts.length; row++) {
     for (int column = 0; column < parts[row].length, column++) {
         maps[row][column] = RenderedMap.create(ImageRenderer
-                .create(parts[row][column]))
-                .createItemStack();
+                .create(parts[row][column]))
+                .createItemStack();
     }
 }
 ```
-
-
-
-
