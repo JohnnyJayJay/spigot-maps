@@ -21,7 +21,7 @@ A small library that makes the use of customised maps in Spigot very easy.
     <dependency>
         <groupId>com.github.johnnyjayjay</groupId>
         <artifactId>spigot-maps</artifactId>
-        <version>master-SNAPSHOT</version>
+        <version>1.0</version>
     </dependency>
 </dependencies>
 ```
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.johnnyjayjay:spigot-maps:master-SNAPSHOT"
+    implementation "com.github.johnnyjayjay:spigot-maps:1.0"
 }
 ```
 
