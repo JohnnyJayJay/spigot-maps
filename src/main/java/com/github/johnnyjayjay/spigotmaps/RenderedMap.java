@@ -41,8 +41,7 @@ public class RenderedMap implements MapView {
      *                should not store its renderers.
      * @return a never-null instance of {@link RenderedMap}.
      */
-    @NotNull
-    public static RenderedMap create(@NotNull MapView view, @Nullable MapStorage storage) {
+    public static RenderedMap create(MapView view, MapStorage storage) {
         MapStorage effectiveStorage = storage == null ? new MapStorage() {
             @Override
             public void remove(int mapId, MapRenderer renderer) {}
@@ -62,7 +61,6 @@ public class RenderedMap implements MapView {
      * @param renderers 0-n renderers that should apply to this map.
      * @return a never-null RenderedMap.
      */
-    @NotNull
     public static RenderedMap create(@NotNull MapRenderer... renderers) {
         return MapBuilder.create().addRenderers(renderers).build();
     }
@@ -74,7 +72,6 @@ public class RenderedMap implements MapView {
      *
      * @return a copy of this map.
      */
-    @NotNull
     public RenderedMap createCopy() {
         return MapBuilder.create()
                 .addRenderers(view.getRenderers())
@@ -88,7 +85,8 @@ public class RenderedMap implements MapView {
      *
      * @param renderer the {@link MapRenderer} to add.
      */
-    public void addRenderer(@NotNull MapRenderer renderer) {
+    @Override
+    public void addRenderer(MapRenderer renderer) {
         storage.store(view.getId(), renderer);
         view.addRenderer(renderer);
     }
@@ -98,6 +96,7 @@ public class RenderedMap implements MapView {
      *
      * @param renderer the {@link MapRenderer} to remove.
      */
+    @Override
     public boolean removeRenderer(MapRenderer renderer) {
         storage.remove(view.getId(), renderer);
         return view.removeRenderer(renderer);
@@ -118,7 +117,7 @@ public class RenderedMap implements MapView {
      *
      * @return a never-null and immutable List containing the renderers.
      */
-    @NotNull
+    @Override
     public List<MapRenderer> getRenderers() {
         return Collections.unmodifiableList(view.getRenderers());
     }
@@ -128,7 +127,6 @@ public class RenderedMap implements MapView {
      *
      * @return the renderer list, streamed.
      */
-    @NotNull
     public Stream<MapRenderer> streamRenderers() {
         return view.getRenderers().stream();
     }
@@ -138,6 +136,7 @@ public class RenderedMap implements MapView {
      *
      * @return the map id.
      */
+    @Override
     public int getId() {
         return view.getId();
     }
@@ -147,14 +146,13 @@ public class RenderedMap implements MapView {
         return view.isVirtual();
     }
 
-    @NotNull
     @Override
     public Scale getScale() {
         return view.getScale();
     }
 
     @Override
-    public void setScale(@NotNull Scale scale) {
+    public void setScale(Scale scale) {
         view.setScale(scale);
     }
 
@@ -178,14 +176,13 @@ public class RenderedMap implements MapView {
         view.setCenterZ(i);
     }
 
-    @Nullable
     @Override
     public World getWorld() {
         return view.getWorld();
     }
 
     @Override
-    public void setWorld(@NotNull World world) {
+    public void setWorld(World world) {
         view.setWorld(world);
     }
 
@@ -195,7 +192,7 @@ public class RenderedMap implements MapView {
      *
      * @return a freshly created ItemStack.
      */
-    public ItemStack createItemStack() {
+    public @NotNull ItemStack createItemStack() {
         MapMeta mapMeta = (MapMeta) Bukkit.getItemFactory().getItemMeta(Material.MAP);
         mapMeta.setMapView(view);
         ItemStack itemStack = new ItemStack(Material.MAP);
@@ -208,7 +205,7 @@ public class RenderedMap implements MapView {
      *
      * @param player the player to give the item to.
      */
-    public void give(Player player) {
+    public void give(@NotNull Player player) {
         player.getInventory().addItem(createItemStack());
         player.updateInventory();
     }

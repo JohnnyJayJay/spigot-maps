@@ -2,6 +2,7 @@ package com.github.johnnyjayjay.spigotmaps;
 
 import org.bukkit.map.MapRenderer;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 

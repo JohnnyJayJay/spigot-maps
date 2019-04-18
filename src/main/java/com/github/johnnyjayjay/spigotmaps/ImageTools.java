@@ -18,12 +18,14 @@ import java.net.URLConnection;
  *
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  */
-public class ImageTools {
+public final class ImageTools {
 
     /**
      * A {@link Dimension} representing the proportions of a Minecraft map.
      */
     public static final Dimension MINECRAFT_MAP_SIZE = new Dimension(128, 128);
+
+    private ImageTools() {}
 
     /**
      * Tries to read an image from a URL using an explicit user-agent.
@@ -33,7 +35,6 @@ public class ImageTools {
      * @return the image or {@code null} if no image could be created.
      * @throws IOException see {@link ImageIO#read(URL)}.
      */
-    @Nullable
     public static BufferedImage loadWithUserAgentFrom(@NotNull URL url) throws IOException {
         URLConnection connection = url.openConnection();
         connection.addRequestProperty("User-Agent", "Mozilla/5.0");
@@ -49,7 +50,6 @@ public class ImageTools {
      * @param color the {@link Color} this image will have.
      * @return a never-null image.
      */
-    @NotNull
     public static BufferedImage createSingleColoredImage(@NotNull Color color) {
         BufferedImage image = new BufferedImage(MINECRAFT_MAP_SIZE.width, MINECRAFT_MAP_SIZE.height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = image.createGraphics();
@@ -65,7 +65,6 @@ public class ImageTools {
      * @param image the image to resize.
      * @return a new image with the according size.
      */
-    @NotNull
     public static BufferedImage resizeToMapSize(@NotNull BufferedImage image) {
         Dimension size = MINECRAFT_MAP_SIZE;
         BufferedImage resized = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
@@ -90,7 +89,6 @@ public class ImageTools {
      * @return a never-null 2-dimensional array of images. The outer index represents a row, the inner
      *         one a column in the square arrangement of parts.
      */
-    @NotNull
     public static BufferedImage[][] resizeIntoMapSizedParts(@NotNull BufferedImage image, boolean crop) {
         return divideIntoParts(crop ? cropToMapDividableSquare(image) : scaleToMapDividableSquare(image));
     }
@@ -137,7 +135,6 @@ public class ImageTools {
      * @param image the image to make a copy of.
      * @return a copy of the image.
      */
-    @NotNull
     public static BufferedImage copyOf(@NotNull BufferedImage image) {
         BufferedImage copy = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
         Graphics2D graphics = copy.createGraphics();

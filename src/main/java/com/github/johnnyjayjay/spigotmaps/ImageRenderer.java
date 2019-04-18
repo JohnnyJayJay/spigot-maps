@@ -28,14 +28,13 @@ public class ImageRenderer extends AbstractMapRenderer {
     }
 
     @Override
-    protected void render(RenderContext context) {
+    protected void render(@NotNull RenderContext context) {
         context.getCanvas().drawImage(startingPoint.x, startingPoint.y, image);
     }
 
     /**
      * Returns a copy of the {@link BufferedImage} used by this renderer.
      */
-    @NotNull
     public BufferedImage getImage() {
         return ImageTools.copyOf(image);
     }
@@ -43,7 +42,6 @@ public class ImageRenderer extends AbstractMapRenderer {
     /**
      * Returns a copy of the point where the renderer begins to render text on a map.
      */
-    @NotNull
     public Point getStartingPoint() {
         return new Point(startingPoint);
     }
@@ -56,8 +54,7 @@ public class ImageRenderer extends AbstractMapRenderer {
      * @param players the players to render for.
      * @return a never-null instance of {@link ImageRenderer}.
      */
-    @NotNull
-    public static ImageRenderer create(@NotNull BufferedImage image, @NotNull Player... players) {
+    public static ImageRenderer create(BufferedImage image, @NotNull Player... players) {
         return builder().image(image).addPlayers(players).build();
     }
 
@@ -69,15 +66,13 @@ public class ImageRenderer extends AbstractMapRenderer {
      * @param players the players to render for.
      * @return a never-null instance of {@link ImageRenderer}.
      */
-    @NotNull
-    public static ImageRenderer createSingleColorRenderer(Color color, Player... players) {
+    public static ImageRenderer createSingleColorRenderer(Color color, @NotNull Player... players) {
         return builder().image(ImageTools.createSingleColoredImage(color)).addPlayers(players).build();
     }
 
     /**
      * Creates and returns a new instance of this class' {@link Builder}.
      */
-    @NotNull
     public static Builder builder() {
         return new Builder();
     }
@@ -108,7 +103,6 @@ public class ImageRenderer extends AbstractMapRenderer {
          *                                  <li>The starting point's coordinates are out of the minecraft map size bounds</li>
          *                                  </ul>
          */
-        @NotNull
         @Override
         public ImageRenderer build() {
             super.check();
@@ -133,7 +127,6 @@ public class ImageRenderer extends AbstractMapRenderer {
          * @return this.
          * @see ImageTools
          */
-        @NotNull
         public Builder image(@NotNull BufferedImage image) {
             this.image = ImageTools.copyOf(image);
             return this;
@@ -151,7 +144,6 @@ public class ImageRenderer extends AbstractMapRenderer {
          * @return this.
          * @see ImageTools#MINECRAFT_MAP_SIZE
          */
-        @NotNull
         public Builder startingPoint(@NotNull Point point) {
             this.startingPoint = new Point(point);
             return this;

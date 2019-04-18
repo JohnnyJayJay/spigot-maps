@@ -33,7 +33,6 @@ public class MapBuilder {
      *
      * @return a new instance of this class.
      */
-    @NotNull
     public static MapBuilder create() {
         return new MapBuilder();
     }
@@ -44,7 +43,6 @@ public class MapBuilder {
      * @throws IllegalArgumentException if any renderer is {@code null}.
      * @return a new {@link RenderedMap}.
      */
-    @NotNull
     public RenderedMap build() {
         world = world == null ? Bukkit.getWorlds().stream().findAny().orElse(null) : world;
         Checks.assertNotNull(world);
@@ -63,8 +61,7 @@ public class MapBuilder {
      * @param world the world the map should belong to or {@code null} if any world can be used.
      * @return this.
      */
-    @NotNull
-    public MapBuilder world(@Nullable World world) {
+    public MapBuilder world(World world) {
         this.world = world;
         return this;
     }
@@ -80,8 +77,7 @@ public class MapBuilder {
      * @param renderers A non-null list of renderers.
      * @return this.
      */
-    @NotNull
-    public MapBuilder addRenderers(@NotNull List<MapRenderer> renderers) {
+    public MapBuilder addRenderers(List<MapRenderer> renderers) {
         this.renderers.addAll(renderers);
         return this;
     }
@@ -95,7 +91,6 @@ public class MapBuilder {
      * @param renderers One or more renderers, or a non-null array of renderers.
      * @return this.
      */
-    @NotNull
     public MapBuilder addRenderers(@NotNull MapRenderer... renderers) {
         return addRenderers(Arrays.asList(renderers));
     }
@@ -108,8 +103,7 @@ public class MapBuilder {
      * @param mapView a {@link MapView} or {@code null}, if a new one should be created.
      * @return this.
      */
-    @NotNull
-    public MapBuilder view(@Nullable MapView mapView) {
+    public MapBuilder view(MapView mapView) {
         this.mapView = mapView;
         return this;
     }
@@ -123,8 +117,7 @@ public class MapBuilder {
      * @param storage a {@link MapStorage} or {@code null} if no storage should be set.
      * @return this.
      */
-    @NotNull
-    public MapBuilder store(@Nullable MapStorage storage) {
+    public MapBuilder store(MapStorage storage) {
         this.storage = storage;
         return this;
     }

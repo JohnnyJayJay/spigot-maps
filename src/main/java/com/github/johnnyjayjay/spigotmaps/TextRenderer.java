@@ -37,14 +37,13 @@ public class TextRenderer extends AbstractMapRenderer {
     }
 
     @Override
-    protected void render(RenderContext context) {
+    protected void render(@NotNull RenderContext context) {
         context.getCanvas().drawText(startingPoint.x, startingPoint.y, font, text);
     }
 
     /**
      * Returns the text that this renderer renders, including new lines {@code \n}.
      */
-    @NotNull
     public String getText() {
         return text;
     }
@@ -52,7 +51,6 @@ public class TextRenderer extends AbstractMapRenderer {
     /**
      * Returns a copy of the point where the renderer begins to render text on a map.
      */
-    @NotNull
     public Point getStartingPoint() {
         return new Point(startingPoint);
     }
@@ -60,7 +58,6 @@ public class TextRenderer extends AbstractMapRenderer {
     /**
      * Returns the font used to render the given text.
      */
-    @NotNull
     public MapFont getFont() {
         return font;
     }
@@ -71,7 +68,6 @@ public class TextRenderer extends AbstractMapRenderer {
      * @param lines 0-n Strings or an array of Strings to use as the lines.
      * @return a new, never-null instance of {@link TextRenderer}.
      */
-    @NotNull
     public static TextRenderer create(@NotNull String... lines) {
         return builder().addLines(lines).build();
     }
@@ -79,7 +75,6 @@ public class TextRenderer extends AbstractMapRenderer {
     /**
      * Creates and returns a new instance of this class' {@link Builder}.
      */
-    @NotNull
     public static Builder builder() {
         return new Builder();
     }
@@ -111,7 +106,6 @@ public class TextRenderer extends AbstractMapRenderer {
          *                                  <li>The starting point's coordinates are out of the minecraft map size bounds</li>
          *                                  </ul>
          */
-        @NotNull
         @Override
         public TextRenderer build() {
             super.check();
@@ -132,8 +126,7 @@ public class TextRenderer extends AbstractMapRenderer {
          * @param lines a list of Strings. Must not be {@code null}.
          * @return this.
          */
-        @NotNull
-        public Builder addLines(@NotNull List<String> lines) {
+        public Builder addLines(List<String> lines) {
             this.lines.addAll(lines);
             return this;
         }
@@ -146,7 +139,6 @@ public class TextRenderer extends AbstractMapRenderer {
          * @param lines 0-n Strings or an array of Strings. Must not be {@code null}.
          * @return this.
          */
-        @NotNull
         public Builder addLines(@NotNull String... lines) {
             return addLines(Arrays.asList(lines));
         }
@@ -163,8 +155,7 @@ public class TextRenderer extends AbstractMapRenderer {
          * @return this.
          * @see ImageTools#MINECRAFT_MAP_SIZE
          */
-        @NotNull
-        public Builder startingPoint(@NotNull Point point) {
+        public Builder startingPoint(Point point) {
             this.startingPoint = new Point(point);
             return this;
         }
@@ -177,8 +168,7 @@ public class TextRenderer extends AbstractMapRenderer {
          * @param font a {@link MapFont} to use as a font for the text.
          * @return this.
          */
-        @NotNull
-        public Builder font(@NotNull MapFont font) {
+        public Builder font(MapFont font) {
             this.font = font;
             return this;
         }

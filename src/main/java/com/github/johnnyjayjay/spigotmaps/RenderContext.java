@@ -34,7 +34,7 @@ public class RenderContext {
      * @return a never-null instance of {@link RenderContext}.
      */
     @NotNull
-    public static RenderContext create(@NotNull MapView mapView, @NotNull MapCanvas mapCanvas, @NotNull Player player) {
+    public static RenderContext create(MapView mapView, MapCanvas mapCanvas, Player player) {
         Checks.checkNotNull(mapView, "MapView");
         Checks.checkNotNull(mapCanvas, "MapCanvas");
         Checks.checkNotNull(player, "Player");
@@ -44,7 +44,6 @@ public class RenderContext {
     /**
      * Returns the MapView.
      */
-    @NotNull
     public MapView getView() {
         return mapView;
     }
@@ -52,7 +51,6 @@ public class RenderContext {
     /**
      * Returns the MapCanvas.
      */
-    @NotNull
     public MapCanvas getCanvas() {
         return mapCanvas;
     }
@@ -60,7 +58,6 @@ public class RenderContext {
     /**
      * Returns the Player.
      */
-    @NotNull
     public Player getPlayer() {
         return player;
     }

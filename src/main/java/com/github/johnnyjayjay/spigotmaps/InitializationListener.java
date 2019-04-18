@@ -46,7 +46,7 @@ public final class InitializationListener implements Listener {
      * @param storage the {@link MapStorage} to be used as a resource for renderers.
      * @param plugin the plugin to register this listener for.
      */
-    public static void register(@NotNull MapStorage storage, @NotNull Plugin plugin) {
+    public static void register(MapStorage storage, Plugin plugin) {
         Bukkit.getPluginManager().registerEvents(new InitializationListener(storage), plugin);
     }
 

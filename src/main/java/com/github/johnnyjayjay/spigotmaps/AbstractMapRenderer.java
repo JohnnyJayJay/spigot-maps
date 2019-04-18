@@ -62,7 +62,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      *
      * @return a Set.
      */
-    public Set<Player> getRemainingPlayers() {
+    public @NotNull Set<Player> getRemainingPlayers() {
         return Collections.unmodifiableSet(receivers);
     }
 
@@ -73,7 +73,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      *
      * @return a Stream of the remaining players.
      */
-    public Stream<Player> streamRemainingPlayers() {
+    public @NotNull Stream<Player> streamRemainingPlayers() {
         return receivers.stream();
     }
 
@@ -83,7 +83,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      *
      * @return a Set.
      */
-    public Set<UUID> getInitialReceivers() {
+    public @NotNull Set<UUID> getInitialReceivers() {
         return Collections.unmodifiableSet(initialReceivers);
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      *
      * @return a Stream of UUIDs belonging to the players this renderer was originally created for.
      */
-    public Stream<UUID> streamInitialReceivers() {
+    public @NotNull Stream<UUID> streamInitialReceivers() {
         return initialReceivers.stream();
     }
 
@@ -106,7 +106,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      *
      * @param context the context for this rendering operation.
      */
-    protected abstract void render(RenderContext context);
+    protected abstract void render(@NotNull RenderContext context);
 
     /**
      * The base Builder class for children of {@link AbstractMapRenderer}.
@@ -128,8 +128,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
          *           well as any other checks to avoid illegal settings should be called before building.
          * @return a never-null instance.
          */
-        @NotNull
-        public abstract T build();
+        public abstract @NotNull T build();
 
         /**
          * Checks whether the precondition is null. Should be called when building instances of {@link AbstractMapRenderer}.
@@ -146,8 +145,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
          * @param players a collection of players. May be empty.
          * @return this.
          */
-        @NotNull
-        public U addPlayers(@NotNull Collection<Player> players) {
+        public @NotNull U addPlayers(@NotNull Collection<Player> players) {
             this.receivers.addAll(players);
             return (U) this;
         }
@@ -160,8 +158,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
          * @param players 0-n players or an array of players to add.
          * @return this.
          */
-        @NotNull
-        public U addPlayers(@NotNull Player... players) {
+        public @NotNull U addPlayers(@NotNull Player... players) {
             return this.addPlayers(Arrays.asList(players));
         }
 
@@ -174,8 +171,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
          * @param precondition a {@link Predicate} that tests a {@link RenderContext}.
          * @return this.
          */
-        @NotNull
-        public U precondition(@NotNull Predicate<RenderContext> precondition) {
+        public @NotNull U precondition(@NotNull Predicate<RenderContext> precondition) {
             this.precondition = precondition;
             return (U) this;
         }
