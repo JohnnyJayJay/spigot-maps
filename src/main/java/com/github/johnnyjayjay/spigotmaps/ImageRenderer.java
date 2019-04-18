@@ -11,7 +11,10 @@ import java.util.function.Predicate;
 
 
 /**
+ * An implementation of {@link AbstractMapRenderer} that renders an image onto a map.
+ *
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
+ * @see Builder
  */
 public class ImageRenderer extends AbstractMapRenderer {
 
@@ -49,7 +52,7 @@ public class ImageRenderer extends AbstractMapRenderer {
      * Creates a new {@link ImageRenderer} that renders a specific image for the specified players
      * or everyone if none are specified..
      *
-     * @param image the image to render.
+     * @param image   the image to render.
      * @param players the players to render for.
      * @return a never-null instance of {@link ImageRenderer}.
      */
@@ -62,7 +65,7 @@ public class ImageRenderer extends AbstractMapRenderer {
      * Creates a new {@link ImageRenderer} that renders a single color onto a map for the specified players
      * or everybody if none are specified.
      *
-     * @param color the color to use.
+     * @param color   the color to use.
      * @param players the players to render for.
      * @return a never-null instance of {@link ImageRenderer}.
      */
@@ -89,39 +92,46 @@ public class ImageRenderer extends AbstractMapRenderer {
         private BufferedImage image = null;
         private Point startingPoint = new Point();
 
-        private Builder() {}
+        private Builder() {
+        }
 
         /**
          * Creates a new {@link ImageRenderer}.
          *
-         * @throws IllegalArgumentException if
-         * <ul>
-         *     <li>The precondition is {@code null}</li>
-         *     <li>The starting point is {@code null}</li>
-         *     <li>The image is {@code null}</li>
-         * </ul>
          * @return a new instance of {@link ImageRenderer}.
+         * @throws IllegalArgumentException if
+         *                                  <ul>
+         *                                  <li>The precondition is {@code null}</li>
+         *                                  <li>The starting point is {@code null}</li>
+         *                                  <li>The image is {@code null}</li>
+         *                                  <li>The starting point's coordinates are not positive</li>
+         *                                  <li>The starting point's coordinates are out of the minecraft map size bounds</li>
+         *                                  </ul>
          */
         @NotNull
         @Override
         public ImageRenderer build() {
             super.check();
             Checks.checkNotNull(startingPoint, "Starting point");
+            Checks.check(startingPoint.x >= 0 && startingPoint.y >= 0, "Negative coordinates are not allowed");
+            Checks.check(startingPoint.x <= ImageTools.MINECRAFT_MAP_SIZE.width
+                            && startingPoint.y <= ImageTools.MINECRAFT_MAP_SIZE.height,
+                    "Starting point is out of minecraft map bounds");
             Checks.checkNotNull(image, "Image");
             return new ImageRenderer(receivers, precondition, image, startingPoint);
         }
 
         /**
          * Sets the image that should be rendered onto the map by this renderer.
-         *
+         * <p>
          * This makes a defensive copy of the {@link BufferedImage}, so changes to the argument will not
          * have any effect on this instance.
-         *
+         * <p>
          * This is a required setting.
          *
-         * @see ImageTools
          * @param image the {@link BufferedImage} to draw.
          * @return this.
+         * @see ImageTools
          */
         @NotNull
         public Builder image(@NotNull BufferedImage image) {
@@ -131,15 +141,15 @@ public class ImageRenderer extends AbstractMapRenderer {
 
         /**
          * Sets the coordinates (via a {@link Point} determining where to begin drawing the image on the map.
-         *
+         * <p>
          * This makes a defensive copy of the {@link Point}, so changes to the argument will not have any
          * effect on this instance.
-         *
+         * <p>
          * This is not required. By default, it will start drawing from the upper left corner (0, 0).
          *
-         * @see ImageTools#MINECRAFT_MAP_SIZE
          * @param point a {@link Point} representing the coordinates, i.e. where to begin drawing.
          * @return this.
+         * @see ImageTools#MINECRAFT_MAP_SIZE
          */
         @NotNull
         public Builder startingPoint(@NotNull Point point) {

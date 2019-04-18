@@ -15,8 +15,8 @@ import java.util.function.Predicate;
 /**
  * An implementation of {@link AbstractMapRenderer} that can be used to render text on a map.
  *
- * @see Builder
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
+ * @see Builder
  */
 public class TextRenderer extends AbstractMapRenderer {
 
@@ -66,6 +66,17 @@ public class TextRenderer extends AbstractMapRenderer {
     }
 
     /**
+     * Creates a {@link TextRenderer} that renders the given lines of text onto a map.
+     *
+     * @param lines 0-n Strings or an array of Strings to use as the lines.
+     * @return a new, never-null instance of {@link TextRenderer}.
+     */
+    @NotNull
+    public static TextRenderer create(@NotNull String... lines) {
+        return builder().addLines(lines).build();
+    }
+
+    /**
      * Creates and returns a new instance of this class' {@link Builder}.
      */
     @NotNull
@@ -84,19 +95,21 @@ public class TextRenderer extends AbstractMapRenderer {
         private Point startingPoint = new Point();
         private MapFont font = MinecraftFont.Font;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         /**
          * Builds a new instance of {@link TextRenderer}.
          *
-         * @throws IllegalArgumentException if:
-         * <ul>
-         *     <li>The precondition is {@code null}</li>
-         *     <li>The font is {@code null}</li>
-         *     <li>The starting point is {@code null}</li>
-         *     <li>The starting point's coordinates are not positive</li>
-         * </ul>
          * @return a never-null instance of {@link TextRenderer}.
+         * @throws IllegalArgumentException if:
+         *                                  <ul>
+         *                                  <li>The precondition is {@code null}</li>
+         *                                  <li>The font is {@code null}</li>
+         *                                  <li>The starting point is {@code null}</li>
+         *                                  <li>The starting point's coordinates are not positive</li>
+         *                                  <li>The starting point's coordinates are out of the minecraft map size bounds</li>
+         *                                  </ul>
          */
         @NotNull
         @Override
@@ -105,12 +118,15 @@ public class TextRenderer extends AbstractMapRenderer {
             Checks.checkNotNull(font, "Font");
             Checks.checkNotNull(startingPoint, "Starting point");
             Checks.check(startingPoint.x >= 0 && startingPoint.y >= 0, "Negative coordinates are not allowed");
+            Checks.check(startingPoint.x <= ImageTools.MINECRAFT_MAP_SIZE.width
+                            && startingPoint.y <= ImageTools.MINECRAFT_MAP_SIZE.height,
+                    "Starting point is out of minecraft map bounds");
             return new TextRenderer(receivers, precondition, String.join("\n", lines), startingPoint, font);
         }
 
         /**
          * Adds a {@link List} of lines (Strings) to the text this renderer will draw.
-         *
+         * <p>
          * Not adding any lines is a valid option and will result in a map without text.
          *
          * @param lines a list of Strings. Must not be {@code null}.
@@ -124,7 +140,7 @@ public class TextRenderer extends AbstractMapRenderer {
 
         /**
          * Adds zero or more lines (Strings) to the text this renderer will draw
-         *
+         * <p>
          * Not adding any lines is a valid option and will result in a map without text.
          *
          * @param lines 0-n Strings or an array of Strings. Must not be {@code null}.
@@ -137,15 +153,15 @@ public class TextRenderer extends AbstractMapRenderer {
 
         /**
          * Sets the coordinates (via a {@link Point} determining where to begin writing the text on the map.
-         *
+         * <p>
          * This makes a defensive copy of the {@link Point}, so changes to the argument will not have any
          * effect on this instance.
-         *
+         * <p>
          * This is not required. By default, it will start drawing from the upper left corner (0, 0).
          *
-         * @see ImageTools#MINECRAFT_MAP_SIZE
          * @param point a {@link Point} representing the coordinates, i.e. where to begin drawing.
          * @return this.
+         * @see ImageTools#MINECRAFT_MAP_SIZE
          */
         @NotNull
         public Builder startingPoint(@NotNull Point point) {
@@ -155,7 +171,7 @@ public class TextRenderer extends AbstractMapRenderer {
 
         /**
          * Sets the font to use for the text.
-         *
+         * <p>
          * This is not required. By default, it is set to {@link MinecraftFont#Font}.
          *
          * @param font a {@link MapFont} to use as a font for the text.

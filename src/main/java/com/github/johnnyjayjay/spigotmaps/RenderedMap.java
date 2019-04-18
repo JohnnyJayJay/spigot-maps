@@ -57,6 +57,17 @@ public class RenderedMap implements MapView {
     }
 
     /**
+     * Creates a simple instance of {@link RenderedMap} just taking the provided renderers.
+     *
+     * @param renderers 0-n renderers that should apply to this map.
+     * @return a never-null RenderedMap.
+     */
+    @NotNull
+    public static RenderedMap create(@NotNull MapRenderer... renderers) {
+        return MapBuilder.create().addRenderers(renderers).build();
+    }
+
+    /**
      * Creates a copy of this map. The copy will use a different {@link MapView} with this map's renderers.
      * The copy will use the same world, if it is present, otherwise it will choose one randomly. Finally, the copy
      * will use the same {@link MapStorage} as this map.
