@@ -49,6 +49,11 @@ dependencies {
 }
 ```
 
+### I don't use a build tool
+
+An already built .jar file can be found [here](https://github.com/JohnnyJayJay/spigot-maps/releases).
+Download it and add it to your project like any other jar file (Eclipse -> Build Path, IntelliJ -> Add as Library).
+
 ## Quick Start
 
 You've got various options when creating renderers and maps:
