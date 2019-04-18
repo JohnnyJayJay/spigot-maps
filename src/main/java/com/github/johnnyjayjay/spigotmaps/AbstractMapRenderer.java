@@ -34,7 +34,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
     private final Set<Player> receivers;
     private final Predicate<RenderContext> precondition;
 
-    protected AbstractMapRenderer(Set<Player> receivers, Predicate<RenderContext> precondition) {
+    protected AbstractMapRenderer(@NotNull Set<Player> receivers, @NotNull Predicate<RenderContext> precondition) {
         super(!receivers.isEmpty());
         this.renderForAllPlayers = receivers.isEmpty();
         this.receivers = new HashSet<>(receivers);
