@@ -22,7 +22,6 @@ import java.util.function.Predicate;
 public class TextRenderer extends AbstractMapRenderer {
 
     private String text;
-    private Point startingPoint;
     private MapFont font;
 
     private TextRenderer(
@@ -33,9 +32,8 @@ public class TextRenderer extends AbstractMapRenderer {
             Point startingPoint,
             MapFont font
     ) {
-        super(receivers, renderOnce, precondition);
+        super(startingPoint, receivers, renderOnce, precondition);
         this.text = text;
-        this.startingPoint = startingPoint;
         this.font = font;
     }
 
@@ -49,13 +47,6 @@ public class TextRenderer extends AbstractMapRenderer {
      */
     public String getText() {
         return text;
-    }
-
-    /**
-     * Returns a copy of the point where the renderer begins to render text on a map.
-     */
-    public Point getStartingPoint() {
-        return new Point(startingPoint);
     }
 
     /**
@@ -75,18 +66,6 @@ public class TextRenderer extends AbstractMapRenderer {
         Checks.checkNotNull(text, "Text");
         this.text = text;
     }
-
-    /**
-     * Sets the point this renderer will start rendering from on the map.
-     *
-     * @param startingPoint a new Point.
-     * @throws IllegalArgumentException if the given point cannot be applied to a minecraft map or is null.
-     */
-    public void setStartingPoint(Point startingPoint) {
-        Checks.checkStartingPoint(startingPoint);
-        this.startingPoint = new Point(startingPoint);
-    }
-
     /**
      * Sets the font the rendered text should use.
      *
@@ -146,11 +125,6 @@ public class TextRenderer extends AbstractMapRenderer {
         public TextRenderer build() {
             super.check();
             Checks.checkNotNull(font, "Font");
-            Checks.checkNotNull(startingPoint, "Starting point");
-            Checks.check(startingPoint.x >= 0 && startingPoint.y >= 0, "Negative coordinates are not allowed");
-            Checks.check(startingPoint.x <= ImageTools.MINECRAFT_MAP_SIZE.width
-                            && startingPoint.y <= ImageTools.MINECRAFT_MAP_SIZE.height,
-                    "Starting point is out of minecraft map bounds");
             return new TextRenderer(receivers, precondition, renderOnce, String.join("\n", lines), startingPoint, font);
         }
 
@@ -177,23 +151,6 @@ public class TextRenderer extends AbstractMapRenderer {
          */
         public Builder addLines(String... lines) {
             return addLines(Arrays.asList(lines));
-        }
-
-        /**
-         * Sets the coordinates (via a {@link Point} determining where to begin writing the text on the map.
-         * <p>
-         * This makes a defensive copy of the {@link Point}, so changes to the argument will not have any
-         * effect on this instance.
-         * <p>
-         * This is not required. By default, it will start drawing from the upper left corner (0, 0).
-         *
-         * @param point a {@link Point} representing the coordinates, i.e. where to begin drawing.
-         * @return this.
-         * @see ImageTools#MINECRAFT_MAP_SIZE
-         */
-        public Builder startingPoint(Point point) {
-            this.startingPoint = new Point(point);
-            return this;
         }
 
         /**
