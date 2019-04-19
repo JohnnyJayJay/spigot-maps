@@ -176,7 +176,8 @@ public abstract class AbstractMapRenderer extends MapRenderer {
         public abstract T build();
 
         /**
-         * Checks whether the precondition is null. Should be called when building instances of {@link AbstractMapRenderer}.
+         * Checks whether the precondition is null or the starting point doesn't fit the minecraft map size.
+         * Should be called before building instances of {@link AbstractMapRenderer}.
          */
         protected final void check() {
             Checks.checkNotNull(precondition, "Precondition");

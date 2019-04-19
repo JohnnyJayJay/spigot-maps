@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT"
+    compile "com.madgag:animated-gif-lib:1.4"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

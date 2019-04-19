@@ -1,7 +1,6 @@
 package com.github.johnnyjayjay.spigotmaps;
 
 import java.awt.Point;
-import java.util.Collection;
 
 /**
  * internal class
@@ -26,16 +25,14 @@ public final class Checks {
             throw new AssertionError("Unexpected null value");
     }
 
-    public static void checkNotEmpty(Collection<?> collection, String name) {
-        check(!collection.isEmpty(), name + " must not be empty");
+    public static void checkStartingPoint(Point startingPoint) {
+        checkNotNull(startingPoint, "Starting point");
+        checkBounds(startingPoint.x, 0, ImageTools.MINECRAFT_MAP_SIZE.width, "Starting point");
+        checkBounds(startingPoint.y, 0, ImageTools.MINECRAFT_MAP_SIZE.height, "Starting point");
     }
 
-    public static void checkStartingPoint(Point point) {
-        Checks.checkNotNull(point, "Starting point");
-        Checks.check(point.x >= 0 && point.y >= 0, "Negative coordinates are not allowed");
-        Checks.check(point.x <= ImageTools.MINECRAFT_MAP_SIZE.width
-                        && point.y <= ImageTools.MINECRAFT_MAP_SIZE.height,
-                "Starting point is out of minecraft map bounds");
+    public static void checkBounds(int number, int startInclusive, int endExclusive, String name) {
+        check(number >= startInclusive && number < endExclusive, name + " out of bounds");
     }
 
 }
