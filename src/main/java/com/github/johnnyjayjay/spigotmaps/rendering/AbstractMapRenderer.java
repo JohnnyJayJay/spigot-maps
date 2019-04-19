@@ -1,5 +1,6 @@
-package com.github.johnnyjayjay.spigotmaps;
+package com.github.johnnyjayjay.spigotmaps.rendering;
 
+import com.github.johnnyjayjay.spigotmaps.Checks;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
@@ -10,10 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The base class for {@link MapRenderer} implementations by this library.
@@ -27,18 +25,18 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractMapRenderer extends MapRenderer {
 
-    private final Set<UUID> initialReceivers;
-
-    private final boolean renderForAllPlayers;
+    private final Set<Player> alreadyReceived;
+    private final boolean renderForAllPlayers, renderOnce;
     private final Set<Player> receivers;
     private final Predicate<RenderContext> precondition;
 
-    protected AbstractMapRenderer(Set<Player> receivers, Predicate<RenderContext> precondition) {
+    protected AbstractMapRenderer(Set<Player> receivers, boolean renderOnce, Predicate<RenderContext> precondition) {
         super(!receivers.isEmpty());
         this.renderForAllPlayers = receivers.isEmpty();
-        this.receivers = new HashSet<>(receivers);
+        this.receivers = Collections.unmodifiableSet(receivers);
+        this.renderOnce = renderOnce;
         this.precondition = precondition;
-        this.initialReceivers = receivers.stream().map(Player::getUniqueId).collect(Collectors.toSet());
+        this.alreadyReceived = new HashSet<>(); // TODO consider an implementation with less overhead
     }
 
     @Override
@@ -46,53 +44,34 @@ public abstract class AbstractMapRenderer extends MapRenderer {
         RenderContext context = RenderContext.create(map, canvas, player);
         if (mayRender(context)) {
             render(context);
-            receivers.remove(player);
+            if (renderOnce)
+                alreadyReceived.add(player);
         }
     }
 
     private boolean mayRender(RenderContext context) {
         return (renderForAllPlayers || receivers.contains(context.getPlayer()))
+                && (!renderOnce || !alreadyReceived.contains(context.getPlayer()))
                 && precondition.test(context);
     }
 
     /**
-     * Returns an immutable, unordered {@link Set} of players, which contains the players this renderer
-     * has not rendered a map for yet or an empty Set if this renderer renders for all players anyway.
+     * Returns an immutable, unordered {@link Set} of players, which contains the receivers of this
+     * renderer or an empty Set if this renderer renders for all players anyway.
      *
      * @return a Set.
      */
-    public Set<Player> getRemainingPlayers() {
-        return Collections.unmodifiableSet(receivers);
+    public Set<Player> getReceivers() {
+        return receivers;
     }
 
     /**
-     * Similar to {@link #getRemainingPlayers()}, but returns a {@link Stream} to work with.
-     * Useful if you want to operate on the remaining players and want to avoid the overhead of
-     * creating an immutable set.
+     * Returns whether this renderer only renders once for every player.
      *
-     * @return a Stream of the remaining players.
+     * @return {@code true}, if it only renders once.
      */
-    public Stream<Player> streamRemainingPlayers() {
-        return receivers.stream();
-    }
-
-    /**
-     * Returns an immutable, unordered Set of UUIDs belonging to the players that were added to this
-     * renderer when it was created. This will be empty if the renderer renders for all players.
-     *
-     * @return a Set.
-     */
-    public Set<UUID> getInitialReceivers() {
-        return Collections.unmodifiableSet(initialReceivers);
-    }
-
-    /**
-     * Similar to {@link #getInitialReceivers()}, but as a {@link Stream}.
-     *
-     * @return a Stream of UUIDs belonging to the players this renderer was originally created for.
-     */
-    public Stream<UUID> streamInitialReceivers() {
-        return initialReceivers.stream();
+    public boolean isRenderOnce() {
+        return renderOnce;
     }
 
     /**
@@ -119,6 +98,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
 
         protected final Set<Player> receivers = new HashSet<>();
         protected Predicate<RenderContext> precondition = (ctx) -> true;
+        protected boolean renderOnce = true;
 
         /**
          * Returns an instance of the renderer the builder is made for.
@@ -173,6 +153,19 @@ public abstract class AbstractMapRenderer extends MapRenderer {
          */
         public U precondition(Predicate<RenderContext> precondition) {
             this.precondition = precondition;
+            return (U) this;
+        }
+
+        /**
+         * Decides whether this renderer should only render once for its receivers.
+         * <p>
+         * This is an optional setting, the default value is {@code true}.
+         *
+         * @param renderOnce true if this renderer renders once for every receiver, false if otherwise.
+         * @return this.
+         */
+        public U renderOnce(boolean renderOnce) {
+            this.renderOnce = renderOnce;
             return (U) this;
         }
     }

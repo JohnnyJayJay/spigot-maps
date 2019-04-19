@@ -1,5 +1,7 @@
-package com.github.johnnyjayjay.spigotmaps;
+package com.github.johnnyjayjay.spigotmaps.rendering;
 
+import com.github.johnnyjayjay.spigotmaps.Checks;
+import com.github.johnnyjayjay.spigotmaps.ImageTools;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapFont;
 import org.bukkit.map.MinecraftFont;
@@ -26,10 +28,12 @@ public class TextRenderer extends AbstractMapRenderer {
     private TextRenderer(
             Set<Player> receivers,
             Predicate<RenderContext> precondition,
+            boolean renderOnce,
             String text,
             Point startingPoint,
-            MapFont font) {
-        super(receivers, precondition);
+            MapFont font
+    ) {
+        super(receivers, renderOnce, precondition);
         this.text = text;
         this.startingPoint = startingPoint;
         this.font = font;
@@ -114,7 +118,7 @@ public class TextRenderer extends AbstractMapRenderer {
             Checks.check(startingPoint.x <= ImageTools.MINECRAFT_MAP_SIZE.width
                             && startingPoint.y <= ImageTools.MINECRAFT_MAP_SIZE.height,
                     "Starting point is out of minecraft map bounds");
-            return new TextRenderer(receivers, precondition, String.join("\n", lines), startingPoint, font);
+            return new TextRenderer(receivers, precondition, renderOnce, String.join("\n", lines), startingPoint, font);
         }
 
         /**

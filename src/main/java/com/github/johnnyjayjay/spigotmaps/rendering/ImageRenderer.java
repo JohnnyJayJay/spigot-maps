@@ -1,5 +1,7 @@
-package com.github.johnnyjayjay.spigotmaps;
+package com.github.johnnyjayjay.spigotmaps.rendering;
 
+import com.github.johnnyjayjay.spigotmaps.Checks;
+import com.github.johnnyjayjay.spigotmaps.ImageTools;
 import org.bukkit.entity.Player;
 
 import java.awt.Color;
@@ -20,8 +22,14 @@ public class ImageRenderer extends AbstractMapRenderer {
     private final BufferedImage image;
     private final Point startingPoint;
 
-    private ImageRenderer(Set<Player> receivers, Predicate<RenderContext> precondition, BufferedImage image, Point startingPoint) {
-        super(receivers, precondition);
+    private ImageRenderer(
+            Set<Player> receivers,
+            Predicate<RenderContext> precondition,
+            boolean renderOnce,
+            BufferedImage image,
+            Point startingPoint
+    ) {
+        super(receivers, renderOnce, precondition);
         this.image = image;
         this.startingPoint = startingPoint;
     }
@@ -111,7 +119,7 @@ public class ImageRenderer extends AbstractMapRenderer {
                             && startingPoint.y <= ImageTools.MINECRAFT_MAP_SIZE.height,
                     "Starting point is out of minecraft map bounds");
             Checks.checkNotNull(image, "Image");
-            return new ImageRenderer(receivers, precondition, image, startingPoint);
+            return new ImageRenderer(receivers, precondition, renderOnce, image, startingPoint);
         }
 
         /**

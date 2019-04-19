@@ -3,9 +3,11 @@ package com.github.johnnyjayjay.spigotmaps;
 import java.util.Collection;
 
 /**
+ * internal class
+ *
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  */
-final class Checks {
+public final class Checks {
 
     private Checks() {}
 

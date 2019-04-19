@@ -1,5 +1,7 @@
 package com.github.johnnyjayjay.spigotmaps;
 
+import com.github.johnnyjayjay.spigotmaps.rendering.TextRenderer;
+
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Dimension;
