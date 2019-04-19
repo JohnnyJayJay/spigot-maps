@@ -27,11 +27,11 @@ public class RenderContext {
     /**
      * Creates a new {@link RenderContext} based on the given arguments.
      *
-     * @throws IllegalArgumentException if any of the arguments is {@code null}.
      * @param mapView the {@link MapView} this rendering will apply to.
      * @param mapCanvas a {@link MapCanvas} that can be used to modify the map.
      * @param player the {@link Player} this map is being rendered for.
      * @return a never-null instance of {@link RenderContext}.
+     * @throws IllegalArgumentException if any of the arguments is {@code null}.
      */
     public static RenderContext create(MapView mapView, MapCanvas mapCanvas, Player player) {
         Checks.checkNotNull(mapView, "MapView");

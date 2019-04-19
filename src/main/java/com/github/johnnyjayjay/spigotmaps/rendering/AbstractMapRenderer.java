@@ -33,7 +33,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
     protected AbstractMapRenderer(Set<Player> receivers, boolean renderOnce, Predicate<RenderContext> precondition) {
         super(!receivers.isEmpty());
         this.renderForAllPlayers = receivers.isEmpty();
-        this.receivers = Collections.unmodifiableSet(receivers);
+        this.receivers = receivers;
         this.renderOnce = renderOnce;
         this.precondition = precondition;
         this.alreadyReceived = new HashSet<>(); // TODO consider an implementation with less overhead
@@ -56,13 +56,36 @@ public abstract class AbstractMapRenderer extends MapRenderer {
     }
 
     /**
+     * Adds a player to this renderer's receivers.
+     *
+     * @param receiver the player to add.
+     * @throws IllegalArgumentException if the argument is {@code null}.
+     */
+    public void addReceiver(Player receiver) {
+        Checks.checkNotNull(receiver, "Receiver");
+        receivers.add(receiver);
+    }
+
+    /**
+     * Removes a player from this renderer's receivers.
+     *
+     * @param receiver the player to remove.
+     * @return {@code true} if the specified player was a receiver.
+     * @throws IllegalArgumentException if the argument is {@code null}.
+     */
+    public boolean removeReceiver(Player receiver) {
+        Checks.checkNotNull(receiver, "Receiver");
+        return receivers.remove(receiver);
+    }
+
+    /**
      * Returns an immutable, unordered {@link Set} of players, which contains the receivers of this
      * renderer or an empty Set if this renderer renders for all players anyway.
      *
      * @return a Set.
      */
     public Set<Player> getReceivers() {
-        return receivers;
+        return Collections.unmodifiableSet(receivers);
     }
 
     /**

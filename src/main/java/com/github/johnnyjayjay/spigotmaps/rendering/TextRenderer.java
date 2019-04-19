@@ -21,9 +21,9 @@ import java.util.function.Predicate;
  */
 public class TextRenderer extends AbstractMapRenderer {
 
-    private final String text;
-    private final Point startingPoint;
-    private final MapFont font;
+    private String text;
+    private Point startingPoint;
+    private MapFont font;
 
     private TextRenderer(
             Set<Player> receivers,
@@ -63,6 +63,39 @@ public class TextRenderer extends AbstractMapRenderer {
      */
     public MapFont getFont() {
         return font;
+    }
+
+    /**
+     * Sets the text rendered by this renderer.
+     *
+     * @param text a new text String. New lines must be included if needed.
+     * @throws IllegalArgumentException if the argument is {@code null}.
+     */
+    public void setText(String text) {
+        Checks.checkNotNull(text, "Text");
+        this.text = text;
+    }
+
+    /**
+     * Sets the point this renderer will start rendering from on the map.
+     *
+     * @param startingPoint a new Point.
+     * @throws IllegalArgumentException if the given point cannot be applied to a minecraft map or is null.
+     */
+    public void setStartingPoint(Point startingPoint) {
+        Checks.checkStartingPoint(startingPoint);
+        this.startingPoint = new Point(startingPoint);
+    }
+
+    /**
+     * Sets the font the rendered text should use.
+     *
+     * @param font a new MapFont.
+     * @throws IllegalArgumentException if the argument is {@code null}.
+     */
+    public void setFont(MapFont font) {
+        Checks.checkNotNull(font, "Font");
+        this.font = font;
     }
 
     /**

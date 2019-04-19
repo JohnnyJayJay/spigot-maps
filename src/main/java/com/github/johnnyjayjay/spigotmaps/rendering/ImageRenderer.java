@@ -19,8 +19,8 @@ import java.util.function.Predicate;
  */
 public class ImageRenderer extends AbstractMapRenderer {
 
-    private final BufferedImage image;
-    private final Point startingPoint;
+    private BufferedImage image;
+    private Point startingPoint;
 
     private ImageRenderer(
             Set<Player> receivers,
@@ -47,10 +47,32 @@ public class ImageRenderer extends AbstractMapRenderer {
     }
 
     /**
+     * Sets the image used by this renderer.
+     *
+     * @param image a BufferedImage to be rendered onto maps.
+     * @throws IllegalArgumentException if the argument is {@code null}.
+     */
+    public void setImage(BufferedImage image) {
+        Checks.checkNotNull(image, "Image");
+        this.image = ImageTools.copyOf(image);
+    }
+
+    /**
      * Returns a copy of the point where the renderer begins to render text on a map.
      */
     public Point getStartingPoint() {
         return new Point(startingPoint);
+    }
+
+    /**
+     * Sets the point on the map where this renderer should start rendering.
+     *
+     * @param startingPoint the point to set.
+     * @throws IllegalArgumentException if the given point cannot be applied to a minecraft map or is null.
+     */
+    public void setStartingPoint(Point startingPoint) {
+        Checks.checkStartingPoint(startingPoint);
+        this.startingPoint = new Point(startingPoint);
     }
 
     /**
@@ -113,11 +135,7 @@ public class ImageRenderer extends AbstractMapRenderer {
         @Override
         public ImageRenderer build() {
             super.check();
-            Checks.checkNotNull(startingPoint, "Starting point");
-            Checks.check(startingPoint.x >= 0 && startingPoint.y >= 0, "Negative coordinates are not allowed");
-            Checks.check(startingPoint.x <= ImageTools.MINECRAFT_MAP_SIZE.width
-                            && startingPoint.y <= ImageTools.MINECRAFT_MAP_SIZE.height,
-                    "Starting point is out of minecraft map bounds");
+            Checks.checkStartingPoint(startingPoint);
             Checks.checkNotNull(image, "Image");
             return new ImageRenderer(receivers, precondition, renderOnce, image, startingPoint);
         }

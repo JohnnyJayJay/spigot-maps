@@ -1,5 +1,6 @@
 package com.github.johnnyjayjay.spigotmaps;
 
+import java.awt.Point;
 import java.util.Collection;
 
 /**
@@ -27,6 +28,14 @@ public final class Checks {
 
     public static void checkNotEmpty(Collection<?> collection, String name) {
         check(!collection.isEmpty(), name + " must not be empty");
+    }
+
+    public static void checkStartingPoint(Point point) {
+        Checks.checkNotNull(point, "Starting point");
+        Checks.check(point.x >= 0 && point.y >= 0, "Negative coordinates are not allowed");
+        Checks.check(point.x <= ImageTools.MINECRAFT_MAP_SIZE.width
+                        && point.y <= ImageTools.MINECRAFT_MAP_SIZE.height,
+                "Starting point is out of minecraft map bounds");
     }
 
 }
