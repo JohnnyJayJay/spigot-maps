@@ -1,5 +1,6 @@
 package com.github.johnnyjayjay.spigotmaps;
 
+import com.github.johnnyjayjay.spigotmaps.rendering.GifImage;
 import com.github.johnnyjayjay.spigotmaps.rendering.TextRenderer;
 
 import javax.imageio.ImageIO;
@@ -11,9 +12,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * TODO convenience methods for gifs
  * A utility class containing several methods to adjust and get images fitting the Minecraft map format.
  *
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
@@ -22,10 +27,12 @@ public final class ImageTools {
 
     /**
      * A {@link Dimension} representing the proportions of a Minecraft map.
+     * Do not mutate this value as it might break this library.
      */
     public static final Dimension MINECRAFT_MAP_SIZE = new Dimension(128, 128);
 
-    private ImageTools() {}
+    private ImageTools() {
+    }
 
     /**
      * Tries to read an image from a URL using an explicit user-agent.
@@ -60,6 +67,19 @@ public final class ImageTools {
     }
 
     /**
+     * Resizes a {@link GifImage} to the size specified in {@link #MINECRAFT_MAP_SIZE}.
+     *
+     * @param gif the non-{@code null} gif to resize.
+     * @return a new {@link GifImage} where each frame has the according size.
+     */
+    public static GifImage resizeToMapSize(GifImage gif) {
+        List<GifImage.Frame> newFrames = new ArrayList<>();
+        for (GifImage.Frame frame : gif)
+            newFrames.add(GifImage.Frame.create(resizeToMapSize(frame.getImage()), frame.getMsDelay()));
+        return GifImage.create(newFrames);
+    }
+
+    /**
      * Resizes an image to the size specified in {@link #MINECRAFT_MAP_SIZE}.
      *
      * @param image the non-{@code null} image to resize.
@@ -75,31 +95,69 @@ public final class ImageTools {
     }
 
     /**
-     * Takes an image and resizes it in such a way that the parts returned by  this method can be put together
+     * Takes a gif image and resizes it in a way that the parts returned by  this method can be put together
      * to form the whole image.
      * The result will then be a square image and the parts will all be of the size specified in
      * {@link #MINECRAFT_MAP_SIZE}.
+     * <p>
+     * The algorithm will make a square version of the image argument first and then divide it into parts.
      *
+     * @param gif the non-{@code null} {@link GifImage} to be divided.
+     * @param crop  true, if each frame should be cropped to a square part in the middle (i.e. the image will not be
+     *              resized) or false, if each frame should be resized (i.e. the whole image will be visible,
+     *              but compressed to 1:1).
+     * @return a never-null List containing the parts. Empty if the gif does not have any frames.
+     */
+    public static List<GifImage> divideIntoMapSizedParts(GifImage gif, boolean crop) {
+        if (gif.getFrameCount() == 0)
+            return Collections.emptyList();
+
+        GifImage.Frame[] newFrames = new GifImage.Frame[gif.getFrameCount()];
+        for (int i = 0; i < gif.getFrameCount(); i++) {
+            GifImage.Frame frame = gif.get(i);
+            newFrames[i] = GifImage.Frame.create(
+                    crop ? cropToMapDividableSquare(frame.getImage()) : scaleToMapDividableSquare(frame.getImage()),
+                    frame.getMsDelay()
+            );
+        }
+
+        int parts = newFrames[0].getImage().getWidth() / MINECRAFT_MAP_SIZE.width * 2;
+        GifImage.Frame[][] dividedParts = new GifImage.Frame[parts][];
+        for (int i = 0; i < newFrames.length; i++) {
+            GifImage.Frame frame = newFrames[i];
+            BufferedImage[] imageParts = divideIntoParts(frame.getImage());
+            for (int j = 0; j < imageParts.length; j++) {
+                dividedParts[j][i] = GifImage.Frame.create(imageParts[j], frame.getMsDelay());
+            }
+        }
+        return Arrays.stream(dividedParts).map(Arrays::asList).map(GifImage::create).collect(Collectors.toList());
+    }
+
+    /**
+     * Takes an image and resizes it in a way that the parts returned by  this method can be put together
+     * to form the whole image.
+     * The result will then be a square image and the parts will all be of the size specified in
+     * {@link #MINECRAFT_MAP_SIZE}.
+     * <p>
      * The algorithm will make a square version of the image argument first and then divide it into parts.
      *
      * @param image the non-{@code null} image to be divided.
-     * @param crop true, if the image should be cropped to a square part in the middle (i.e. the image will not be
-     *             resized) or false, if the image should be resized (i.e. the whole image will be visible,
-     *             but compressed to 1:1).
-     * @return a never-null 2-dimensional array of images. The outer index represents a row, the inner
-     *         one a column in the square arrangement of parts.
+     * @param crop  true, if the image should be cropped to a square part in the middle (i.e. the image will not be
+     *              resized) or false, if the image should be resized (i.e. the whole image will be visible,
+     *              but compressed to 1:1).
+     * @return a never-null List containing the parts.
      */
-    public static BufferedImage[][] divideIntoMapSizedParts(BufferedImage image, boolean crop) {
-        return divideIntoParts(crop ? cropToMapDividableSquare(image) : scaleToMapDividableSquare(image));
+    public static List<BufferedImage> divideIntoMapSizedParts(BufferedImage image, boolean crop) {
+        return Arrays.asList(divideIntoParts(crop ? cropToMapDividableSquare(image) : scaleToMapDividableSquare(image)));
     }
 
-    private static BufferedImage[][] divideIntoParts(BufferedImage image) {
+    private static BufferedImage[] divideIntoParts(BufferedImage image) {
         Dimension partSize = MINECRAFT_MAP_SIZE;
         int linearParts = image.getWidth() / partSize.width;
-        BufferedImage[][] result = new BufferedImage[linearParts][linearParts];
+        BufferedImage[] result = new BufferedImage[linearParts * 2];
         for (int i = 0; i < linearParts; i++) {
             for (int j = 0; j < linearParts; j++) {
-                result[j][i] = (image.getSubimage(partSize.width * j, partSize.height * i, partSize.width, partSize.height));
+                result[i] = image.getSubimage(partSize.width * j, partSize.height * i, partSize.width, partSize.height);
             }
         }
         return result;
