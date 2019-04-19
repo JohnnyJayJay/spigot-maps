@@ -89,7 +89,7 @@ public final class ImageTools {
      * @return a never-null 2-dimensional array of images. The outer index represents a row, the inner
      *         one a column in the square arrangement of parts.
      */
-    public static BufferedImage[][] resizeIntoMapSizedParts(BufferedImage image, boolean crop) {
+    public static BufferedImage[][] divideIntoMapSizedParts(BufferedImage image, boolean crop) {
         return divideIntoParts(crop ? cropToMapDividableSquare(image) : scaleToMapDividableSquare(image));
     }
 

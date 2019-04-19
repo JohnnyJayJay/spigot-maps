@@ -29,6 +29,10 @@ public class GifImage implements Iterable<GifImage.Frame> {
                 .collect(Collectors.toList()));
     }
 
+    public static GifImage create(List<Frame> frames) {
+        return new GifImage(frames);
+    }
+
     @Override
     public Iterator<Frame> iterator() {
         return frames.iterator();
