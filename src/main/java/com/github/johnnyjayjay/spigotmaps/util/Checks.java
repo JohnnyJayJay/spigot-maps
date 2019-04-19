@@ -1,4 +1,4 @@
-package com.github.johnnyjayjay.spigotmaps;
+package com.github.johnnyjayjay.spigotmaps.util;
 
 import java.awt.Point;
 

@@ -1,7 +1,6 @@
 package com.github.johnnyjayjay.spigotmaps.rendering;
 
-import com.github.johnnyjayjay.spigotmaps.Checks;
-import com.github.johnnyjayjay.spigotmaps.ImageTools;
+import com.github.johnnyjayjay.spigotmaps.util.Checks;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapFont;
 import org.bukkit.map.MinecraftFont;
@@ -109,7 +108,7 @@ public class TextRenderer extends AbstractMapRenderer {
         }
 
         /**
-         * Builds a new instance of {@link TextRenderer}.
+         * Builds a new instance of {@link TextRenderer} based on the settings made.
          *
          * @return a never-null instance of {@link TextRenderer}.
          * @throws IllegalArgumentException if:

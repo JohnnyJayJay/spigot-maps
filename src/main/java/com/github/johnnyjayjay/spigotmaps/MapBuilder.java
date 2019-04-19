@@ -3,6 +3,7 @@ package com.github.johnnyjayjay.spigotmaps;
 import com.github.johnnyjayjay.spigotmaps.rendering.AbstractMapRenderer;
 import com.github.johnnyjayjay.spigotmaps.rendering.ImageRenderer;
 import com.github.johnnyjayjay.spigotmaps.rendering.TextRenderer;
+import com.github.johnnyjayjay.spigotmaps.util.Checks;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.map.MapRenderer;

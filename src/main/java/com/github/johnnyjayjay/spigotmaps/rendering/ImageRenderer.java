@@ -1,7 +1,7 @@
 package com.github.johnnyjayjay.spigotmaps.rendering;
 
-import com.github.johnnyjayjay.spigotmaps.Checks;
-import com.github.johnnyjayjay.spigotmaps.ImageTools;
+import com.github.johnnyjayjay.spigotmaps.util.Checks;
+import com.github.johnnyjayjay.spigotmaps.util.ImageTools;
 import org.bukkit.entity.Player;
 
 import java.awt.Color;
@@ -99,7 +99,7 @@ public class ImageRenderer extends AbstractMapRenderer {
         }
 
         /**
-         * Creates a new {@link ImageRenderer}.
+         * Builds a new instance of {@link ImageRenderer} based on the settings made.
          *
          * @return a new instance of {@link ImageRenderer}.
          * @throws IllegalArgumentException if

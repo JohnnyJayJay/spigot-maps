@@ -1,13 +1,13 @@
 package com.github.johnnyjayjay.spigotmaps.rendering;
 
-import com.github.johnnyjayjay.spigotmaps.Checks;
-import com.github.johnnyjayjay.spigotmaps.ImageTools;
+import com.github.johnnyjayjay.spigotmaps.util.Checks;
+import com.github.johnnyjayjay.spigotmaps.util.ImageTools;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;

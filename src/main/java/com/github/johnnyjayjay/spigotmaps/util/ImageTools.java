@@ -1,4 +1,4 @@
-package com.github.johnnyjayjay.spigotmaps;
+package com.github.johnnyjayjay.spigotmaps.util;
 
 import com.github.johnnyjayjay.spigotmaps.rendering.GifImage;
 import com.github.johnnyjayjay.spigotmaps.rendering.TextRenderer;
