@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
+ * TODO convenience methods for gifs
  * A utility class containing several methods to adjust and get images fitting the Minecraft map format.
  *
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)

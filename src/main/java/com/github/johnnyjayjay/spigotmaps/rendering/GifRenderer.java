@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 /**
+ * TODO documentation
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  */
 public class GifRenderer extends AbstractMapRenderer {

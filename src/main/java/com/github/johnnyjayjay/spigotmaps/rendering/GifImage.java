@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
+ * TODO documentation
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  */
 public class GifImage implements Iterable<GifImage.Frame> {
