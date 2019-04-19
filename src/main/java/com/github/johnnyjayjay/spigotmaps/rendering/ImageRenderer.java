@@ -38,10 +38,10 @@ public class ImageRenderer extends AbstractMapRenderer {
     }
 
     /**
-     * Returns a copy of the {@link BufferedImage} used by this renderer.
+     * Returns the {@link BufferedImage} used by this renderer.
      */
     public BufferedImage getImage() {
-        return ImageTools.copyOf(image);
+        return image;
     }
 
     /**
@@ -52,7 +52,7 @@ public class ImageRenderer extends AbstractMapRenderer {
      */
     public void setImage(BufferedImage image) {
         Checks.checkNotNull(image, "Image");
-        this.image = ImageTools.copyOf(image);
+        this.image = image;
     }
 
     /**
@@ -121,9 +121,6 @@ public class ImageRenderer extends AbstractMapRenderer {
         /**
          * Sets the image that should be rendered onto the map by this renderer.
          * <p>
-         * This makes a defensive copy of the {@link BufferedImage}, so changes to the argument will not
-         * have any effect on this instance.
-         * <p>
          * This is a required setting.
          *
          * @param image the non-{@code null} {@link BufferedImage} to draw.
@@ -131,7 +128,7 @@ public class ImageRenderer extends AbstractMapRenderer {
          * @see ImageTools
          */
         public Builder image(BufferedImage image) {
-            this.image = ImageTools.copyOf(image);
+            this.image = image;
             return this;
         }
     }
