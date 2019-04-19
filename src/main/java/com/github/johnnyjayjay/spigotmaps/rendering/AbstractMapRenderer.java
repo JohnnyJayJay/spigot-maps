@@ -25,10 +25,12 @@ import java.util.function.Predicate;
  */
 public abstract class AbstractMapRenderer extends MapRenderer {
 
-    private final Set<Player> alreadyReceived;
+    private final Set<RenderContext> alreadyReceived;
     private final boolean renderForAllPlayers, renderOnce;
     private final Set<Player> receivers;
     private final Predicate<RenderContext> precondition;
+
+    private boolean stop;
 
     protected AbstractMapRenderer(Set<Player> receivers, boolean renderOnce, Predicate<RenderContext> precondition) {
         super(!receivers.isEmpty());
@@ -37,6 +39,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
         this.renderOnce = renderOnce;
         this.precondition = precondition;
         this.alreadyReceived = new HashSet<>(); // TODO consider an implementation with less overhead
+        this.stop = false;
     }
 
     @Override
@@ -45,13 +48,14 @@ public abstract class AbstractMapRenderer extends MapRenderer {
         if (mayRender(context)) {
             render(context);
             if (renderOnce)
-                alreadyReceived.add(player);
+                alreadyReceived.add(context);
         }
     }
 
     private boolean mayRender(RenderContext context) {
-        return (renderForAllPlayers || receivers.contains(context.getPlayer()))
-                && (!renderOnce || !alreadyReceived.contains(context.getPlayer()))
+        return !stop
+                &&(renderForAllPlayers || receivers.contains(context.getPlayer()))
+                && (!renderOnce || !alreadyReceived.contains(context))
                 && precondition.test(context);
     }
 
@@ -98,11 +102,20 @@ public abstract class AbstractMapRenderer extends MapRenderer {
     }
 
     /**
+     * Makes this renderer stop rendering anything, forever.
+     */
+    public void stopRendering() {
+        this.stop = true;
+    }
+
+    /**
      * Renders the map after the preconditions have passed, i.e.:
      * <ul>
-     * <li>The predicate's test was successful</li>
      * <li>This renderer applies to the player or</li>
      * <li>This renderer renders maps for all players</li>
+     * <li>This renderer does not only render once or</li>
+     * <li>This renderer has not rendered for the given context yet</li>
+     * <li>The predicate's test was successful</li>
      * </ul>
      *
      * @param context the context for this rendering operation.

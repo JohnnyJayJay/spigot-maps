@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 
+import java.util.Objects;
+
 /**
  * A container class for every map rendering operation. It contains the subject
  * {@link MapView}, a {@link MapCanvas} as well as the {@link Player} the map is rendered for.
@@ -59,5 +61,19 @@ public class RenderContext {
      */
     public Player getPlayer() {
         return player;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RenderContext that = (RenderContext) o;
+        return mapView.getId() == that.mapView.getId()
+                && Objects.equals(player, that.player);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mapView.getId(), player);
     }
 }
