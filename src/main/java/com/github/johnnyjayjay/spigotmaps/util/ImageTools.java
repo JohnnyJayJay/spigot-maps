@@ -105,7 +105,7 @@ public final class ImageTools {
      * @param gif the non-{@code null} {@link GifImage} to be divided.
      * @param crop  true, if each frame should be cropped to a square part in the middle (i.e. the image will not be
      *              resized) or false, if each frame should be resized (i.e. the whole image will be visible,
-     *              but compressed to 1:1).
+     *              but compressed to 1:1). Note that it still might be resized if it is too small.
      * @return a never-null List containing the parts. Empty if the gif does not have any frames.
      */
     public static List<GifImage> divideIntoMapSizedParts(GifImage gif, boolean crop) {
@@ -121,8 +121,8 @@ public final class ImageTools {
             );
         }
 
-        int parts = newFrames[0].getImage().getWidth() / MINECRAFT_MAP_SIZE.width * 2;
-        GifImage.Frame[][] dividedParts = new GifImage.Frame[parts][];
+        int parts = newFrames[0].getImage().getWidth() / MINECRAFT_MAP_SIZE.width;
+        GifImage.Frame[][] dividedParts = new GifImage.Frame[parts][newFrames.length];
         for (int i = 0; i < newFrames.length; i++) {
             GifImage.Frame frame = newFrames[i];
             BufferedImage[] imageParts = divideIntoParts(frame.getImage());
@@ -144,7 +144,7 @@ public final class ImageTools {
      * @param image the non-{@code null} image to be divided.
      * @param crop  true, if the image should be cropped to a square part in the middle (i.e. the image will not be
      *              resized) or false, if the image should be resized (i.e. the whole image will be visible,
-     *              but compressed to 1:1).
+     *              but compressed to 1:1). Note that it still might be resized if it is too small.
      * @return a never-null List containing the parts.
      */
     public static List<BufferedImage> divideIntoMapSizedParts(BufferedImage image, boolean crop) {
@@ -154,13 +154,13 @@ public final class ImageTools {
     private static BufferedImage[] divideIntoParts(BufferedImage image) {
         Dimension partSize = MINECRAFT_MAP_SIZE;
         int linearParts = image.getWidth() / partSize.width;
-        BufferedImage[] result = new BufferedImage[linearParts * 2];
+        List<BufferedImage> result = new ArrayList<>(linearParts * linearParts);
         for (int i = 0; i < linearParts; i++) {
             for (int j = 0; j < linearParts; j++) {
-                result[i] = image.getSubimage(partSize.width * j, partSize.height * i, partSize.width, partSize.height);
+                result.add(image.getSubimage(partSize.width * i, partSize.height * i, partSize.width, partSize.height));
             }
         }
-        return result;
+        return result.toArray(new BufferedImage[0]);
     }
 
     private static BufferedImage scaleToMapDividableSquare(BufferedImage image) {
@@ -177,10 +177,19 @@ public final class ImageTools {
     private static BufferedImage cropToMapDividableSquare(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
-        int measure = width > height
-                ? MINECRAFT_MAP_SIZE.width * (width / MINECRAFT_MAP_SIZE.width)
-                : MINECRAFT_MAP_SIZE.height * (height / MINECRAFT_MAP_SIZE.height);
-        return copyOf(image).getSubimage(width - measure / 2, height - measure / 2, measure, measure);
+        Dimension size = MINECRAFT_MAP_SIZE;
+        if (width < size.width && height < size.height) {
+            return resizeToMapSize(image);
+        } else if (width < size.width) {
+            return resizeToMapSize(image.getSubimage(0, (height - size.height) / 2, size.width, size.height));
+        } else if (height < size.height) {
+            return resizeToMapSize(image.getSubimage((width - size.width) / 2, 0, size.width, size.height));
+        } else {
+            int measure = width < height
+                    ? size.width * (width / size.width)
+                    : size.height * (height / size.height);
+            return copyOf(image).getSubimage((width - measure) / 2, (height - measure) / 2, measure, measure);
+        }
     }
 
     /**
