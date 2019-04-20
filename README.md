@@ -1,13 +1,14 @@
 # Spigot-Maps
 
-[![Release](https://jitpack.io/v/User/Repo.svg)] 
+![Release](https://jitpack.io/v/JohnnyJayJay/spigot-maps.svg)
+
 [JavaDoc](https://javadoc.jitpack.io/com/github/johnnyjayjay/spigot-maps/1.0/javadoc/index.html)
 
 A small library that makes the use of customised maps in Spigot very easy.
 
 ## Features
 - Dynamic map rendering (based on render context)
-- Text and image rendering with convenient usage
+- Text, image and animated gif rendering with convenient usage
 - Base class for own renderer implementations
 - API to store renderers persistently
 - Tools to resize / crop / divide images so that they fit the minecraft maps
