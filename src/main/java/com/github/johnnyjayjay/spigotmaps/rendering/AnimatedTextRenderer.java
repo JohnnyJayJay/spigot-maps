@@ -39,6 +39,17 @@ public class AnimatedTextRenderer extends TextRenderer {
         this.ticksToWait = tickDelay + 1;
     }
 
+    private double calculateTicksToWait() {
+        double charsPerTick = charsPerSecond / 20D;
+        return (currentChar + 1) / charsPerTick - currentChar / charsPerTick;
+    }
+
+    private int charsToAppend(double ticksToWait) {
+        return ticksToWait < 1
+                ? (int) (1 / ticksToWait)
+                : 1;
+    }
+
     @Override
     protected void render(RenderContext context) {
         if (--ticksToWait > 0)
@@ -47,9 +58,13 @@ public class AnimatedTextRenderer extends TextRenderer {
         if (currentChar >= text.length()) {
             stopRendering();
         } else {
-            renderedText.append(text.charAt(currentChar++));
+            double ticksToWait = calculateTicksToWait();
+            this.ticksToWait = ticksToWait < 1 ? 1 : Math.round(ticksToWait);
+            for (int destinationLength = charsToAppend(ticksToWait) + currentChar;
+                 currentChar < destinationLength; currentChar++) {
+                renderedText.append(text.charAt(currentChar));
+            }
             context.getCanvas().drawText(startingPoint.x, startingPoint.y, font, renderedText.toString());
-            this.ticksToWait = Math.round(Math.pow(charsPerSecond / 20D, -1));
         }
     }
 
