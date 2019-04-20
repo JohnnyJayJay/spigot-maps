@@ -23,7 +23,7 @@ import java.util.function.Predicate;
  *
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  * @see ImageRenderer
- * @see TextRenderer
+ * @see SimpleTextRenderer
  */
 public abstract class AbstractMapRenderer extends MapRenderer {
 
@@ -137,6 +137,15 @@ public abstract class AbstractMapRenderer extends MapRenderer {
     }
 
     /**
+     * Returns whether this renderer has stopped rendering as a result to a call to {@link #stopRendering()}.
+     *
+     * @return {@code true}, if it has stopped.
+     */
+    public boolean isStopped() {
+        return stop;
+    }
+
+    /**
      * Renders the map after the preconditions have passed, i.e.:
      * <ul>
      * <li>This renderer applies to the player or</li>
@@ -179,7 +188,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
          * Checks whether the precondition is null or the starting point doesn't fit the minecraft map size.
          * Should be called before building instances of {@link AbstractMapRenderer}.
          */
-        protected final void check() {
+        protected void check() {
             Checks.checkNotNull(precondition, "Precondition");
             Checks.checkStartingPoint(startingPoint);
         }

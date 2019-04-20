@@ -1,7 +1,7 @@
 package com.github.johnnyjayjay.spigotmaps.util;
 
 import com.github.johnnyjayjay.spigotmaps.rendering.GifImage;
-import com.github.johnnyjayjay.spigotmaps.rendering.TextRenderer;
+import com.github.johnnyjayjay.spigotmaps.rendering.SimpleTextRenderer;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -52,7 +52,7 @@ public final class ImageTools {
 
     /**
      * Creates a {@link BufferedImage} with the size of {@link #MINECRAFT_MAP_SIZE}.
-     * The whole image will have one color. This can be used as a background for {@link TextRenderer}s, for example.
+     * The whole image will have one color. This can be used as a background for {@link SimpleTextRenderer}s, for example.
      *
      * @param color the non-{@code null} {@link Color} this image will have.
      * @return a never-null image.

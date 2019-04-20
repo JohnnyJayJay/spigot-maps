@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -186,13 +187,28 @@ public class RenderedMap implements MapView {
 
     /**
      * Creates and returns an {@link ItemStack} of the type {@code Material.MAP} associated with this instance's
-     * underlying {@link MapView}.
+     * underlying {@link MapView} and no further metadata.
      *
-     * @return a freshly created, never-{@code null} ItemStack.
+     * @return a never-{@code null} ItemStack.
+     * @see #createItemStack(String, String...)
      */
     public ItemStack createItemStack() {
+        return createItemStack(null);
+    }
+
+    /**
+     * Creates and returns an {@link ItemStack} of the type {@code Material.MAP} associated with this instance's
+     * underlying {@link MapView}.
+     *
+     * @param displayName the display name of the result.
+     * @param lore the lore of the result or nothing, if there shouldn't be lore.
+     * @return a new ItemStack.
+     */
+    public ItemStack createItemStack(String displayName, String... lore) {
         MapMeta mapMeta = (MapMeta) Bukkit.getItemFactory().getItemMeta(Material.MAP);
         mapMeta.setMapView(view);
+        mapMeta.setDisplayName(displayName);
+        mapMeta.setLore(lore.length == 0 ? null : Arrays.asList(lore));
         ItemStack itemStack = new ItemStack(Material.MAP);
         itemStack.setItemMeta(mapMeta);
         return itemStack;

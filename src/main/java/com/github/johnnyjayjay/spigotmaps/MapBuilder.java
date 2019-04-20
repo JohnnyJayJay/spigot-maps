@@ -2,7 +2,7 @@ package com.github.johnnyjayjay.spigotmaps;
 
 import com.github.johnnyjayjay.spigotmaps.rendering.AbstractMapRenderer;
 import com.github.johnnyjayjay.spigotmaps.rendering.ImageRenderer;
-import com.github.johnnyjayjay.spigotmaps.rendering.TextRenderer;
+import com.github.johnnyjayjay.spigotmaps.rendering.SimpleTextRenderer;
 import com.github.johnnyjayjay.spigotmaps.util.Checks;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -75,7 +75,7 @@ public class MapBuilder {
      *
      * @see AbstractMapRenderer
      * @see ImageRenderer
-     * @see TextRenderer
+     * @see SimpleTextRenderer
      * @param renderers A non-null list of renderers.
      * @return this.
      */

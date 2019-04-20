@@ -89,6 +89,7 @@ public class ImageRenderer extends AbstractMapRenderer {
     /**
      * A builder class used to create instances of the enclosing {@link ImageRenderer} class.
      *
+     * @see #builder()
      * @author Johnny_JayJay (https://github.com/johnnyjayjay)
      */
     public static class Builder extends AbstractMapRenderer.Builder<ImageRenderer, Builder> {

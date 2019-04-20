@@ -6,29 +6,23 @@ import org.bukkit.map.MapFont;
 import org.bukkit.map.MinecraftFont;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
 /**
- * An implementation of {@link AbstractMapRenderer} that can be used to render text on a map.
- *
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
- * @see Builder
  */
-public class TextRenderer extends AbstractMapRenderer {
+public abstract class TextRenderer extends AbstractMapRenderer {
 
-    private String text;
-    private MapFont font;
+    protected CharSequence text;
+    protected MapFont font;
 
-    private TextRenderer(
-            Set<Player> receivers,
-            Predicate<RenderContext> precondition,
-            boolean renderOnce,
-            String text,
+    protected TextRenderer(
             Point startingPoint,
+            Set<Player> receivers,
+            boolean renderOnce,
+            Predicate<RenderContext> precondition,
+            CharSequence text,
             MapFont font
     ) {
         super(startingPoint, receivers, renderOnce, precondition);
@@ -36,16 +30,22 @@ public class TextRenderer extends AbstractMapRenderer {
         this.font = font;
     }
 
-    @Override
-    protected void render(RenderContext context) {
-        context.getCanvas().drawText(startingPoint.x, startingPoint.y, font, text);
-    }
-
     /**
      * Returns the text that this renderer renders, including new lines {@code \n}.
      */
     public String getText() {
-        return text;
+        return text.toString();
+    }
+
+    /**
+     * Sets the text rendered by this renderer.
+     *
+     * @param text a new text String. New lines must be included if needed.
+     * @throws IllegalArgumentException if the argument is {@code null}.
+     */
+    public void setText(CharSequence text) {
+        Checks.checkNotNull(text, "Text");
+        this.text = text;
     }
 
     /**
@@ -55,16 +55,6 @@ public class TextRenderer extends AbstractMapRenderer {
         return font;
     }
 
-    /**
-     * Sets the text rendered by this renderer.
-     *
-     * @param text a new text String. New lines must be included if needed.
-     * @throws IllegalArgumentException if the argument is {@code null}.
-     */
-    public void setText(String text) {
-        Checks.checkNotNull(text, "Text");
-        this.text = text;
-    }
     /**
      * Sets the font the rendered text should use.
      *
@@ -77,67 +67,23 @@ public class TextRenderer extends AbstractMapRenderer {
     }
 
     /**
-     * Creates a {@link TextRenderer} that renders the given lines of text onto a map.
-     *
-     * @param lines 0-n Strings or an array of Strings to use as the lines. Must not be {@code null}.
-     * @return a new, never-null instance of {@link TextRenderer}.
-     */
-    public static TextRenderer create(String... lines) {
-        return builder().addLines(lines).build();
-    }
-
-    /**
-     * Creates and returns a new instance of this class' {@link Builder}.
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    /**
-     * A builder class used to create instances of the enclosing {@link TextRenderer} class.
+     * A base builder class for every extension of {@link TextRenderer}.
      *
      * @author Johnny_JayJay (https://github.com/johnnyjayjay)
      */
-    public static class Builder extends AbstractMapRenderer.Builder<TextRenderer, Builder> {
+    protected static abstract class Builder<T extends TextRenderer, U extends Builder<T, U>>
+            extends AbstractMapRenderer.Builder<T, U> {
 
-        private List<String> lines = new ArrayList<>();
-        private Point startingPoint = new Point();
-        private MapFont font = MinecraftFont.Font;
-
-        private Builder() {
-        }
+        protected final StringBuilder text = new StringBuilder();
+        protected MapFont font = MinecraftFont.Font;
 
         /**
-         * Builds a new instance of {@link TextRenderer} based on the settings made.
-         *
-         * @return a never-null instance of {@link TextRenderer}.
-         * @throws IllegalArgumentException if:
-         *                                  <ul>
-         *                                  <li>The precondition is {@code null}</li>
-         *                                  <li>The font is {@code null}</li>
-         *                                  <li>The starting point is {@code null}</li>
-         *                                  <li>The starting point's coordinates are not positive</li>
-         *                                  <li>The starting point's coordinates are out of the minecraft map size bounds</li>
-         *                                  </ul>
+         * Makes the checks from {@link AbstractMapRenderer.Builder#check()} and additionally checks if the font is {@code null}.
          */
         @Override
-        public TextRenderer build() {
+        protected void check() {
             super.check();
             Checks.checkNotNull(font, "Font");
-            return new TextRenderer(receivers, precondition, renderOnce, String.join("\n", lines), startingPoint, font);
-        }
-
-        /**
-         * Adds a {@link List} of lines (Strings) to the text this renderer will draw.
-         * <p>
-         * Not adding any lines is a valid option and will result in a map without text.
-         *
-         * @param lines a list of Strings. Must not be {@code null}.
-         * @return this.
-         */
-        public Builder addLines(List<String> lines) {
-            this.lines.addAll(lines);
-            return this;
         }
 
         /**
@@ -148,8 +94,24 @@ public class TextRenderer extends AbstractMapRenderer {
          * @param lines 0-n Strings or an array of Strings. Must not be {@code null}.
          * @return this.
          */
-        public Builder addLines(String... lines) {
-            return addLines(Arrays.asList(lines));
+        public U addLines(CharSequence... lines) {
+            for (CharSequence line : lines)
+                text.append(line).append('\n');
+            return (U) this;
+        }
+
+        /**
+         * Adds an {@link Iterable} of lines (Strings) to the text this renderer will draw.
+         * <p>
+         * Not adding any lines is a valid option and will result in a map without text.
+         *
+         * @param lines an Iterable of Strings, e.g. a List. Must not be {@code null}.
+         * @return this.
+         */
+        public U addLines(Iterable<? extends CharSequence> lines) {
+            for (CharSequence line : lines)
+                text.append(line).append('\n');
+            return (U) this;
         }
 
         /**
@@ -160,9 +122,9 @@ public class TextRenderer extends AbstractMapRenderer {
          * @param font a {@link MapFont} to use as a font for the text.
          * @return this.
          */
-        public Builder font(MapFont font) {
+        public U font(MapFont font) {
             this.font = font;
-            return this;
+            return (U) this;
         }
     }
 }
