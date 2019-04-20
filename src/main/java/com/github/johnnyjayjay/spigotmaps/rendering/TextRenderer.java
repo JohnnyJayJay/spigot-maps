@@ -115,6 +115,18 @@ public abstract class TextRenderer extends AbstractMapRenderer {
         }
 
         /**
+         * Adds a {@link CharSequence} to the text this renderer will draw.
+         *
+         * @param text A CharSequence, e.g. a String to add. This must include new line characters
+         *             if the result should be multiple lines.
+         * @return this.
+         */
+        public U addText(CharSequence text) {
+            this.text.append(text);
+            return (U) this;
+        }
+
+        /**
          * Sets the font to use for the text.
          * <p>
          * This is not required. By default, it is set to {@link MinecraftFont#Font}.
