@@ -167,7 +167,7 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
      */
     @SuppressWarnings("unchecked")
-    protected static abstract class Builder<T, U extends Builder<T, U>> {
+    protected static abstract class Builder<T extends AbstractMapRenderer, U extends Builder<T, U>> {
 
         protected final Set<Player> receivers = new HashSet<>();
         protected Predicate<RenderContext> precondition = (ctx) -> true;
