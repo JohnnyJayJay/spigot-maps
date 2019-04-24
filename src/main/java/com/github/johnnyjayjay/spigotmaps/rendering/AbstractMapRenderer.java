@@ -1,11 +1,13 @@
 package com.github.johnnyjayjay.spigotmaps.rendering;
 
-import com.github.johnnyjayjay.spigotmaps.Checks;
+import com.github.johnnyjayjay.spigotmaps.util.Checks;
+import com.github.johnnyjayjay.spigotmaps.util.ImageTools;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
+import java.awt.Point;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,9 +23,11 @@ import java.util.function.Predicate;
  *
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  * @see ImageRenderer
- * @see TextRenderer
+ * @see SimpleTextRenderer
  */
 public abstract class AbstractMapRenderer extends MapRenderer {
+
+    protected Point startingPoint;
 
     private final Set<RenderContext> alreadyReceived;
     private final boolean renderForAllPlayers, renderOnce;
@@ -32,8 +36,14 @@ public abstract class AbstractMapRenderer extends MapRenderer {
 
     private boolean stop;
 
-    protected AbstractMapRenderer(Set<Player> receivers, boolean renderOnce, Predicate<RenderContext> precondition) {
+    protected AbstractMapRenderer(
+            Point startingPoint,
+            Set<Player> receivers,
+            boolean renderOnce,
+            Predicate<RenderContext> precondition
+    ) {
         super(!receivers.isEmpty());
+        this.startingPoint = startingPoint;
         this.renderForAllPlayers = receivers.isEmpty();
         this.receivers = receivers;
         this.renderOnce = renderOnce;
@@ -93,6 +103,24 @@ public abstract class AbstractMapRenderer extends MapRenderer {
     }
 
     /**
+     * Returns a copy of the point where the renderer begins to render text on a map.
+     */
+    public Point getStartingPoint() {
+        return new Point(startingPoint);
+    }
+
+    /**
+     * Sets the point on the map where this renderer should start rendering.
+     *
+     * @param startingPoint the point to set.
+     * @throws IllegalArgumentException if the given point cannot be applied to a minecraft map or is null.
+     */
+    public void setStartingPoint(Point startingPoint) {
+        Checks.checkStartingPoint(startingPoint);
+        this.startingPoint = new Point(startingPoint);
+    }
+
+    /**
      * Returns whether this renderer only renders once for every player.
      *
      * @return {@code true}, if it only renders once.
@@ -106,6 +134,15 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      */
     public void stopRendering() {
         this.stop = true;
+    }
+
+    /**
+     * Returns whether this renderer has stopped rendering as a result to a call to {@link #stopRendering()}.
+     *
+     * @return {@code true}, if it has stopped.
+     */
+    public boolean isStopped() {
+        return stop;
     }
 
     /**
@@ -130,11 +167,12 @@ public abstract class AbstractMapRenderer extends MapRenderer {
      * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
      */
     @SuppressWarnings("unchecked")
-    protected static abstract class Builder<T, U extends Builder<T, U>> {
+    protected static abstract class Builder<T extends AbstractMapRenderer, U extends Builder<T, U>> {
 
         protected final Set<Player> receivers = new HashSet<>();
         protected Predicate<RenderContext> precondition = (ctx) -> true;
         protected boolean renderOnce = true;
+        protected Point startingPoint = new Point();
 
         /**
          * Returns an instance of the renderer the builder is made for.
@@ -147,10 +185,12 @@ public abstract class AbstractMapRenderer extends MapRenderer {
         public abstract T build();
 
         /**
-         * Checks whether the precondition is null. Should be called when building instances of {@link AbstractMapRenderer}.
+         * Checks whether the precondition is null or the starting point doesn't fit the minecraft map size.
+         * Should be called before building instances of {@link AbstractMapRenderer}.
          */
-        protected final void check() {
+        protected void check() {
             Checks.checkNotNull(precondition, "Precondition");
+            Checks.checkStartingPoint(startingPoint);
         }
 
         /**
@@ -202,6 +242,23 @@ public abstract class AbstractMapRenderer extends MapRenderer {
          */
         public U renderOnce(boolean renderOnce) {
             this.renderOnce = renderOnce;
+            return (U) this;
+        }
+
+        /**
+         * Sets the coordinates (via a {@link Point} determining where to begin drawing the image on the map.
+         * <p>
+         * This makes a defensive copy of the {@link Point}, so changes to the argument will not have any
+         * effect on this instance.
+         * <p>
+         * This is not required. By default, it will start drawing from the upper left corner (0, 0).
+         *
+         * @param point a non-{@code null} {@link Point} representing the coordinates, i.e. where to begin drawing.
+         * @return this.
+         * @see ImageTools#MINECRAFT_MAP_SIZE
+         */
+        public U startingPoint(Point point) {
+            this.startingPoint = new Point(point);
             return (U) this;
         }
     }

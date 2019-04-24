@@ -1,13 +1,14 @@
 # Spigot-Maps
 
-[![Release](https://jitpack.io/v/User/Repo.svg)] 
-[JavaDoc](https://javadoc.jitpack.io/com/github/johnnyjayjay/spigot-maps/1.0/javadoc/index.html)
+![Release](https://jitpack.io/v/JohnnyJayJay/spigot-maps.svg)
+
+[JavaDoc](https://javadoc.jitpack.io/com/github/johnnyjayjay/spigot-maps/1.1/javadoc/index.html)
 
 A small library that makes the use of customised maps in Spigot very easy.
 
 ## Features
 - Dynamic map rendering (based on render context)
-- Text and image rendering with convenient usage
+- (Animated) Text, image and animated gif rendering with convenient usage
 - Base class for own renderer implementations
 - API to store renderers persistently
 - Tools to resize / crop / divide images so that they fit the minecraft maps
@@ -67,7 +68,7 @@ ImageRenderer catRenderer = ImageRenderer.builder()
         .build(); // build the instance
 
 Dimension mapSize = ImageTools.MINECRAFT_MAP_SIZE; // the dimensions of a Minecraft map (in pixels)
-TextRenderer messageRenderer = TextRenderer.builder()
+SimpleTextRenderer messageRenderer = SimpleTextRenderer.builder()
         .addLines("Cats", "are", "so", "cute") // set the lines that will be drawn onto the map
         .addPlayers(player1, player2)
         .font(myFont) // set a text font
@@ -84,6 +85,19 @@ ItemStack mapItem = map.createItemStack(); // get an ItemStack from this map to 
 ```
 
 This example would result in a map that has an image of a cat in the background and the text "Cats are so cute" in the foreground.
+
+You can still mutate the renderers afterwards:
+```java
+messageRenderer.setText("Cats\nare\nstill\ncute");
+```
+Note that this will only have effect if `renderOnce` is set to true while building. 
+The reason for that decision is performance. Only rendering once saves resources, but 
+disables later modification.
+If you want to mutate a renderer after building but then leave it that way, you may call
+```java
+messageRenderer.stopRendering();
+```
+to save the resources.
 
 ### Quicker ways
 
@@ -106,7 +120,7 @@ See `ImageTools.createSingleColoredImage(Color)` to get an instance of `Buffered
 **Create a TextRenderer with just some lines of text**:
 
 ```java
-TextRenderer renderer = TextRenderer.create("This", "is", "noice");
+SimpleTextRenderer renderer = SimpleTextRenderer.create("This", "is", "noice");
 ```
 
 **Create a RenderedMap with just some MapRenderers**:
@@ -117,33 +131,95 @@ RenderedMap map = RenderedMap.create(renderer1, renderer2); // not providing any
 
 ### Advanced
 
-Images that take more than 1 map to display can be created using `ImageTools.resizeIntoMapSizedParts(BufferedImage, boolean)`. This uses an algorithm that makes a square version of the image first. How this is done can be determined via the second `boolean` parameter. If it is set to `true`, a square cropped out from the middle of the image will be used. If it is `false`, the whole image will be resized to 1:1.
+#### Gifs 
+
+This library can handle animated gifs using `GifRenderer` and `GifImage`.
+Instances of `GifImage` can be obtained via an instance of `GifDecoder` from this library's dependencies:
+```java
+GifDecoder decoder = new GifDecoder();
+decoder.read("./example.gif"); // this also works with URLs, InputStreams etc.
+GifImage gif = GifImage.fromDecoder(decoder);
+```
+For more info about `GifDecoder`, look at [this](https://github.com/rtyley/animated-gif-lib-for-java).
+
+You can also implement an algorithm to decode gifs yourself and then make use of `GifImage#create(List<Frame>)`.
+
+`GifRenderer`s are created like any other renderer:
+```java
+GifRenderer renderer = GifRenderer.builder()
+        .gif(gif) // set the GifImage we just created
+        .repeat(5) // repeat the gif 5 times: to repeat it indefinitely, omit this setting or set it to GifRenderer.REPEAT_FOREVER
+        .build();
+```
+This renderer stops rendering automatically after 5 repetitions and 
+can now be added to a `MapView` / `RenderedMap` as shown above.
+
+#### Animated Text
+
+Text doesn't have to be static. This library provides a map renderer that renders text character by character.
+```java
+AnimatedTextRenderer renderer = AnimatedTextRenderer.builder()
+        .addText("This text will appear char by char.")
+        .charsPerSecond(10) // 10 characters should appear each second
+        .delay(20) // start the animation after 20 ticks (1 second)
+        .build();
+```
+This renderer automatically stops rendering after having finished.
+
+#### Splitting images
+
+Images that take more than 1 map to display can be created using `ImageTools.divideIntoMapSizedParts(BufferedImage, boolean)`.
+This uses an algorithm that makes a square version of the image first. How this is done can be determined via the second 
+`boolean` parameter. If it is set to `true`, a square cropped out from the middle of the image will be used 
+(if the image is big enough). If it is `false`, the whole image will be resized to 1:1.
 
 ```java
-BufferedImage[][] parts = ImageTools.resizeIntoMapSizedParts(image, true);
+List<BufferedImage> parts = ImageTools.divideIntoMapSizedParts(image, true);
 ```
+
+**The exact same methods are available to `GifImage`s.**
 
 To turn these into map items:
 
 ```java
-ItemStack[][] maps = Arrays.stream(parts).map(
-        (part) -> Arrays.stream(part)
-                .map(ImageRenderer::create)
-                .map(RenderedMap::create)
-                .map(RenderedMap::createItemStack)
-                .toArray(ItemStack[]::new)
-).toArray(ItemStack[][]::new);
+for (BufferedImage part : parts) {
+    ImageRenderer renderer = ImageRenderer.create(part);
+    ItemStack mapItem = RenderedMap.create(renderer).createItemStack();
+    // do something with it
+}
 ```
 
-This results in the same as:
+Or, if you want to do it stream-like:
+```java
+parts.stream()
+        .map(ImageRenderer::create)
+        .map(RenderedMap::create)
+        .map(RenderedMap::createItemStack)
+        .forEach((mapItem) -> {
+    // do something with it
+})
+```
+
+#### Using MapStorage
+
+The `MapStorage` API makes it possible to save renderers persistently. To utilise it, you have to implement MapStorage:
 
 ```java
-ItemStack[][] maps = new ItemStack[parts.length][];
-for (int row = 0; row < parts.length; row++) {
-    for (int column = 0; column < parts[row].length, column++) {
-        maps[row][column] = RenderedMap.create(ImageRenderer
-                .create(parts[row][column]))
-                .createItemStack();
+public class FileStorage implements MapStorage {
+
+    @Override
+    public void store(int id, MapRenderer renderer) {
+        // serialize the renderer associated with the given id
+    }
+    
+    @Override
+    public boolean remove(int id, MapRenderer renderer) {
+        // remove the given renderer's association with the given id
+    }
+    
+    @Override
+    public List<MapRenderer> provide(int id) {
+        // fetch / deserialize / read all renderers stored for the given id
     }
 }
 ```

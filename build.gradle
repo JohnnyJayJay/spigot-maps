@@ -1,10 +1,11 @@
 plugins {
     id 'java'
     id 'maven'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
 group 'com.github.johnnyjayjay'
-version '1.0'
+version '1.1'
 
 sourceCompatibility = 1.8
 
@@ -20,6 +21,7 @@ repositories {
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT"
+    compile "com.madgag:animated-gif-lib:1.4"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -32,9 +34,12 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+shadowJar.classifier = "withDependencies"
+
 artifacts {
     archives sourcesJar
     archives javadocJar
+    archives shadowJar
 }
 
 
