@@ -2,7 +2,7 @@
 
 ![Release](https://jitpack.io/v/JohnnyJayJay/spigot-maps.svg)
 
-[JavaDoc](https://javadoc.jitpack.io/com/github/johnnyjayjay/spigot-maps/1.0/javadoc/index.html)
+[JavaDoc](https://javadoc.jitpack.io/com/github/johnnyjayjay/spigot-maps/1.1/javadoc/index.html)
 
 A small library that makes the use of customised maps in Spigot very easy.
 
@@ -200,4 +200,26 @@ parts.stream()
 })
 ```
 
+#### Using MapStorage
 
+The `MapStorage` API makes it possible to save renderers persistently. To utilise it, you have to implement MapStorage:
+
+```java
+public class FileStorage implements MapStorage {
+
+    @Override
+    public void store(int id, MapRenderer renderer) {
+        // serialize the renderer associated with the given id
+    }
+    
+    @Override
+    public boolean remove(int id, MapRenderer renderer) {
+        // remove the given renderer's association with the given id
+    }
+    
+    @Override
+    public List<MapRenderer> provide(int id) {
+        // fetch / deserialize / read all renderers stored for the given id
+    }
+}
+```

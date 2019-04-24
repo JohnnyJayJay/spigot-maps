@@ -71,6 +71,7 @@ public abstract class TextRenderer extends AbstractMapRenderer {
      *
      * @author Johnny_JayJay (https://github.com/johnnyjayjay)
      */
+    @SuppressWarnings("unchecked")
     protected static abstract class Builder<T extends TextRenderer, U extends Builder<T, U>>
             extends AbstractMapRenderer.Builder<T, U> {
 

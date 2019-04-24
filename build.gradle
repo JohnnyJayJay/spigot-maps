@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
 group 'com.github.johnnyjayjay'
@@ -36,6 +37,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
+    archives shadowJar
 }
 
 
