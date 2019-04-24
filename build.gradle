@@ -34,6 +34,8 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+shadowJar.classifier = "withDependencies"
+
 artifacts {
     archives sourcesJar
     archives javadocJar
