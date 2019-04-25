@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+}
+
+group 'com.github.johnnyjayjay'
+version '1.0-TEST'
+
+sourceCompatibility = 12
+
+repositories {
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"
+    }
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
+dependencies {
+    compileOnly "org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT"
+    implementation "com.github.johnnyjayjay:spigot-maps:1.1"
+}
+
+

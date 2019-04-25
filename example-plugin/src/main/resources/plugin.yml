@@ -1,0 +1,17 @@
+name: SamplePlugin
+version: 1.0-TEST
+main: com.github.johnnyjayjay.spigotmap.example.SamplePlugin
+
+commands:
+    image:
+        description: Generates a map with the image you provide on it.
+        usage: /image [url]
+    text:
+        description: Generates a map with the text you provide on it.
+        usage: /text [text] 
+    atext:
+        description: Generates a map that makes the text you provide appear character by character.
+        usage: /atext [text]
+    gif:
+        description: Generates a map with the gif you provide on it.
+        usage: /gif [url]
