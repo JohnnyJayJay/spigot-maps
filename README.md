@@ -15,7 +15,7 @@ A small library that makes the use of customised maps in Spigot very easy.
 - Convenient builder classes and factory methods
 - Implementation of MapView to use directly with the Spigot API
 
-**[YOU CAN FIND AN EXAMPLE PLUGIN HERE](./master/example-plugin)**
+**[YOU CAN FIND AN EXAMPLE PLUGIN HERE](./example-plugin)**
 
 ## Add as dependency
 
