@@ -136,7 +136,7 @@ public class RenderedMap implements MapView {
      * @return the map id.
      */
     @Override
-    public int getId() {
+    public short getId() {
         return view.getId();
     }
 
@@ -206,10 +206,10 @@ public class RenderedMap implements MapView {
      */
     public ItemStack createItemStack(String displayName, String... lore) {
         MapMeta mapMeta = (MapMeta) Bukkit.getItemFactory().getItemMeta(Material.MAP);
-        mapMeta.setMapView(view);
         mapMeta.setDisplayName(displayName);
         mapMeta.setLore(lore.length == 0 ? null : Arrays.asList(lore));
         ItemStack itemStack = new ItemStack(Material.MAP);
+        itemStack.setDurability(getId());
         itemStack.setItemMeta(mapMeta);
         return itemStack;
     }
