@@ -27,4 +27,7 @@ dependencies {
     implementation "com.github.johnnyjayjay:spigot-maps:1.1"
 }
 
+tasks.withType(JavaCompile).each {
+    it.options.compilerArgs.add('--enable-preview')
+}
 

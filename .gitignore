@@ -1,4 +1,4 @@
 out/*
-build/*
+**/build/*
 .idea/*
-.gradle/*
+**/.gradle/*
