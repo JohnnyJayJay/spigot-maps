@@ -101,16 +101,6 @@ public class RenderedMap implements MapView {
         return view.removeRenderer(renderer);
     }
 
-    @Override
-    public boolean isUnlimitedTracking() {
-        return view.isUnlimitedTracking();
-    }
-
-    @Override
-    public void setUnlimitedTracking(boolean b) {
-        view.setUnlimitedTracking(b);
-    }
-
     /**
      * Returns the renderers set for this map.
      *
