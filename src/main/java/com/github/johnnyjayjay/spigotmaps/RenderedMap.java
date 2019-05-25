@@ -131,7 +131,7 @@ public class RenderedMap implements MapView {
     }
 
     /**
-     * Returns the identifier of the underlying {@link MapView}.
+     * Returns the identifier of this {@link MapView}.
      *
      * @return the map id.
      */
