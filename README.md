@@ -33,7 +33,7 @@ A small library that makes the use of customised maps in Spigot very easy.
     <dependency>
         <groupId>com.github.johnnyjayjay</groupId>
         <artifactId>spigot-maps</artifactId>
-        <version>1.0</version>
+        <version>1.11+-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
@@ -48,7 +48,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.johnnyjayjay:spigot-maps:1.1"
+    implementation "com.github.johnnyjayjay:spigot-maps:1.11+-SNAPSHOT"
 }
 ```
 
