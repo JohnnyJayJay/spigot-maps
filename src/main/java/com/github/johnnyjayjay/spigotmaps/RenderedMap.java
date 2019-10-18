@@ -1,6 +1,5 @@
 package com.github.johnnyjayjay.spigotmaps;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -102,6 +101,16 @@ public class RenderedMap implements MapView {
     }
 
     @Override
+    public boolean isTrackingPosition() {
+        return view.isTrackingPosition();
+    }
+
+    @Override
+    public void setTrackingPosition(boolean trackingPosition) {
+        view.setTrackingPosition(trackingPosition);
+    }
+
+    @Override
     public boolean isUnlimitedTracking() {
         return view.isUnlimitedTracking();
     }
@@ -109,6 +118,16 @@ public class RenderedMap implements MapView {
     @Override
     public void setUnlimitedTracking(boolean b) {
         view.setUnlimitedTracking(b);
+    }
+
+    @Override
+    public boolean isLocked() {
+        return view.isLocked();
+    }
+
+    @Override
+    public void setLocked(boolean locked) {
+        view.setLocked(locked);
     }
 
     /**
@@ -205,11 +224,11 @@ public class RenderedMap implements MapView {
      * @return a new ItemStack.
      */
     public ItemStack createItemStack(String displayName, String... lore) {
-        MapMeta mapMeta = (MapMeta) Bukkit.getItemFactory().getItemMeta(Material.MAP);
+        ItemStack itemStack = new ItemStack(Material.MAP);
+        MapMeta mapMeta = (MapMeta) itemStack.getItemMeta();
         mapMeta.setMapView(view);
         mapMeta.setDisplayName(displayName);
         mapMeta.setLore(lore.length == 0 ? null : Arrays.asList(lore));
-        ItemStack itemStack = new ItemStack(Material.MAP);
         itemStack.setItemMeta(mapMeta);
         return itemStack;
     }
