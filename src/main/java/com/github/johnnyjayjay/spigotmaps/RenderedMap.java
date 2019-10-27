@@ -111,6 +111,16 @@ public class RenderedMap implements MapView {
         view.setUnlimitedTracking(b);
     }
 
+    @Override
+    public boolean isLocked() {
+        return view.isLocked();
+    }
+
+    @Override
+    public void setLocked(boolean locked) {
+        view.setLocked(locked);
+    }
+
     /**
      * Returns the renderers set for this map.
      *
