@@ -1,5 +1,7 @@
 package com.github.johnnyjayjay.spigotmaps;
 
+import com.github.johnnyjayjay.spigotmaps.util.Compatibility;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -7,6 +9,9 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +30,8 @@ public class RenderedMap {
     private RenderedMap(MapView view, MapStorage storage) {
         this.view = view;
         this.storage = storage;
-        view.getRenderers().forEach((renderer) -> storage.store(view.getId(), renderer));
+        int id = Compatibility.getId(view);
+        view.getRenderers().forEach((renderer) -> storage.store(id, renderer));
     }
 
     /**
