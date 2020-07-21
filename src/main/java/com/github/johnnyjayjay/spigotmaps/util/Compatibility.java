@@ -23,7 +23,7 @@ public final class Compatibility {
     if (!versionFinder.find()) {
       throw new AssertionError("Could not find MC version in Bukkit.getVersion()");
     }
-    int[] version = Arrays.stream(Bukkit.getVersion().split("\\."))
+    int[] version = Arrays.stream(versionFinder.group().split("\\."))
         .mapToInt(Integer::parseInt)
         .toArray();
     legacy = version[0] < 1 || version[1] < 13 || version[2] < 2;

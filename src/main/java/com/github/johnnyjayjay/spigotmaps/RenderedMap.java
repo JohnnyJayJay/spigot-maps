@@ -26,12 +26,13 @@ public class RenderedMap {
 
     private final MapView view;
     private final MapStorage storage;
+    private final int mapViewId;
 
     private RenderedMap(MapView view, MapStorage storage) {
         this.view = view;
         this.storage = storage;
-        int id = Compatibility.getId(view);
-        view.getRenderers().forEach((renderer) -> storage.store(id, renderer));
+        this.mapViewId = Compatibility.getId(view);
+        view.getRenderers().forEach((renderer) -> storage.store(mapViewId, renderer));
     }
 
     /**
@@ -112,7 +113,11 @@ public class RenderedMap {
     public ItemStack createItemStack(String displayName, String... lore) {
         ItemStack itemStack = new ItemStack(Material.MAP);
         MapMeta mapMeta = (MapMeta) itemStack.getItemMeta();
-        mapMeta.setMapView(view);
+        if (Compatibility.isLegacy()) {
+            itemStack.setDurability((short) mapViewId);
+        } else {
+            mapMeta.setMapView(view);
+        }
         mapMeta.setDisplayName(displayName);
         mapMeta.setLore(lore.length == 0 ? null : Arrays.asList(lore));
         itemStack.setItemMeta(mapMeta);
