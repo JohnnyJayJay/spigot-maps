@@ -16,6 +16,14 @@ A small library that makes the use of customised maps in Spigot very easy.
 
 **[YOU CAN FIND AN EXAMPLE PLUGIN HERE](./example-plugin)**
 
+To test this plugin, do
+```
+git clone https://github.com/johnnyjayjay/spigot-maps.git
+cd spigot-maps/example-plugin
+./gradlew shadowJar 
+```
+Then add `example-plugin-1.0-TEST.jar` (found in `build/libs`) to your plugins folder
+
 ## Add as dependency
 
 ### Maven
