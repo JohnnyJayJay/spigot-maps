@@ -32,7 +32,8 @@ public class SamplePlugin extends JavaPlugin {
         Player player = (Player) sender;
         try {
             RenderedMap map = createMap(player, name, String.join(" ", args));
-            map.give(player);
+            player.getInventory().addItem(map.createItemStack());
+            player.updateInventory();
             player.sendMessage("§aLook in your inventory!");
         } catch (IOException e) {
             player.sendMessage("§cCould not create map: " + e.getMessage());
