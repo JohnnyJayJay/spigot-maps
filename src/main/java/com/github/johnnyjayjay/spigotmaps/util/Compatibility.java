@@ -7,16 +7,28 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  */
 public final class Compatibility {
 
+  private static final boolean legacy;
   private static final MethodHandle getId;
 
   static {
-    MethodType methodType = MethodType.methodType(isLegacy() ? short.class : int.class);
+    Matcher versionFinder = Pattern.compile("(?<=\\(MC: )\\d+\\.\\d+\\.\\d+(?=\\))").matcher(Bukkit.getVersion());
+    if (!versionFinder.find()) {
+      throw new AssertionError("Could not find MC version in Bukkit.getVersion()");
+    }
+    int[] version = Arrays.stream(Bukkit.getVersion().split("\\."))
+        .mapToInt(Integer::parseInt)
+        .toArray();
+    legacy = version[0] < 1 || version[1] < 13 || version[2] < 2;
+
+    MethodType methodType = MethodType.methodType(legacy ? short.class : int.class);
     try {
       getId = MethodHandles.publicLookup().findVirtual(MapView.class, "getId", methodType);
     } catch (NoSuchMethodException | IllegalAccessException e) {
@@ -25,10 +37,7 @@ public final class Compatibility {
   }
 
   public static boolean isLegacy() {
-    int[] version = Arrays.stream(Bukkit.getVersion().split("\\."))
-        .mapToInt(Integer::parseInt)
-        .toArray();
-    return version[0] < 1 || version[1] < 13 || version[2] < 2;
+    return legacy;
   }
 
   public static int getId(MapView map) {
