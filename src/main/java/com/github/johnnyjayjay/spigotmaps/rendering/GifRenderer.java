@@ -67,6 +67,15 @@ public class GifRenderer extends AbstractMapRenderer {
     }
 
     /**
+     * Returns the {@link GifImage} used by this renderer.
+     *
+     * @return the image
+     */
+    public GifImage getImage() {
+        return image;
+    }
+
+    /**
      * Returns how often the gif will still repeat itself or {@link #REPEAT_FOREVER} if it repeats indefinitely.
      */
     public int getToRepeat() {
