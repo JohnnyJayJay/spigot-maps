@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'maven'
 }
 
@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT"
-    implementation "com.madgag:animated-gif-lib:1.4"
+    api "com.madgag:animated-gif-lib:1.4"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -36,7 +36,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
-    archives shadowJar
 }
 
 
