@@ -2,7 +2,7 @@
 
 ![Release](https://jitpack.io/v/JohnnyJayJay/spigot-maps.svg)
 
-[JavaDoc](https://javadoc.jitpack.io/com/github/johnnyjayjay/spigot-maps/1.13.2+-SNAPSHOT/javadoc/index.html)
+[JavaDoc](https://javadoc.jitpack.io/com/github/johnnyjayjay/spigot-maps/2.0/javadoc/index.html)
 
 A small library that makes the use of customised maps in Spigot very easy.
 
@@ -13,7 +13,6 @@ A small library that makes the use of customised maps in Spigot very easy.
 - API to store renderers persistently
 - Tools to resize / crop / divide images so that they fit the minecraft maps
 - Convenient builder classes and factory methods
-- Implementation of MapView to use directly with the Spigot API
 
 **[YOU CAN FIND AN EXAMPLE PLUGIN HERE](./example-plugin)**
 
@@ -92,7 +91,7 @@ You can still mutate the renderers afterwards:
 ```java
 messageRenderer.setText("Cats\nare\nstill\ncute");
 ```
-Note that this will only have effect if `renderOnce` is set to true while building. 
+Note that this will only have effect if `renderOnce` is set to `false` while building. 
 The reason for that decision is performance. Only rendering once saves resources, but 
 disables later modification.
 If you want to mutate a renderer after building but then leave it that way, you may call
@@ -101,7 +100,7 @@ messageRenderer.stopRendering();
 ```
 to save the resources.
 
-### Quicker ways
+### Shortcuts
 
 There are even quicker ways to accomplish some of these operations.
 
