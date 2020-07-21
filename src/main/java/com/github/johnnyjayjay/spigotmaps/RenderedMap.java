@@ -1,7 +1,6 @@
 package com.github.johnnyjayjay.spigotmaps;
 
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
@@ -9,9 +8,7 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * A class representing a {@link MapView} with a storage, renderers and some convenience methods.
@@ -20,7 +17,7 @@ import java.util.stream.Stream;
  * @see RenderedMap#create(MapView, MapStorage)
  * @author Johnny_JayJay (https://www.github.com/JohnnyJayJay)
  */
-public class RenderedMap implements MapView {
+public class RenderedMap {
 
     private final MapView view;
     private final MapStorage storage;
@@ -79,129 +76,12 @@ public class RenderedMap implements MapView {
     }
 
     /**
-     * Adds a renderer to this map and stores it in the storage, if one is present.
+     * Returns the view backing this RenderedMap.
      *
-     * @param renderer the {@link MapRenderer} to add.
+     * @return a MapView instance.
      */
-    @Override
-    public void addRenderer(MapRenderer renderer) {
-        storage.store(view.getId(), renderer);
-        view.addRenderer(renderer);
-    }
-
-    /**
-     * Removes a renderer from this map and from the storage, if one is present.
-     *
-     * @param renderer the {@link MapRenderer} to remove.
-     */
-    @Override
-    public boolean removeRenderer(MapRenderer renderer) {
-        storage.remove(view.getId(), renderer);
-        return view.removeRenderer(renderer);
-    }
-
-    @Override
-    public boolean isTrackingPosition() {
-        return view.isTrackingPosition();
-    }
-
-    @Override
-    public void setTrackingPosition(boolean trackingPosition) {
-        view.setTrackingPosition(trackingPosition);
-    }
-
-    @Override
-    public boolean isUnlimitedTracking() {
-        return view.isUnlimitedTracking();
-    }
-
-    @Override
-    public void setUnlimitedTracking(boolean b) {
-        view.setUnlimitedTracking(b);
-    }
-
-    @Override
-    public boolean isLocked() {
-        return view.isLocked();
-    }
-
-    @Override
-    public void setLocked(boolean locked) {
-        view.setLocked(locked);
-    }
-
-    /**
-     * Returns the renderers set for this map.
-     *
-     * @return a never-null and immutable List containing the renderers.
-     */
-    @Override
-    public List<MapRenderer> getRenderers() {
-        return Collections.unmodifiableList(view.getRenderers());
-    }
-
-    /**
-     * Returns the renderers of this map as a {@link Stream}.
-     *
-     * @return the renderer list, streamed.
-     */
-    public Stream<MapRenderer> streamRenderers() {
-        return view.getRenderers().stream();
-    }
-
-    /**
-     * Returns the identifier of this {@link MapView}.
-     *
-     * @return the map id.
-     */
-    @Override
-    public int getId() {
-        return view.getId();
-    }
-
-    @Override
-    public boolean isVirtual() {
-        return view.isVirtual();
-    }
-
-    @Override
-    public Scale getScale() {
-        return view.getScale();
-    }
-
-    @Override
-    public void setScale(Scale scale) {
-        view.setScale(scale);
-    }
-
-    @Override
-    public int getCenterX() {
-        return view.getCenterX();
-    }
-
-    @Override
-    public int getCenterZ() {
-        return view.getCenterZ();
-    }
-
-    @Override
-    public void setCenterX(int i) {
-        view.setCenterX(i);
-    }
-
-    @Override
-    public void setCenterZ(int i) {
-        view.setCenterZ(i);
-    }
-
-    @Override
-    public World getWorld() {
-        return view.getWorld();
-    }
-
-    @Override
-    public void setWorld(World world) {
-        view.setWorld(world);
+    public MapView getView() {
+        return view;
     }
 
     /**
@@ -231,15 +111,5 @@ public class RenderedMap implements MapView {
         mapMeta.setLore(lore.length == 0 ? null : Arrays.asList(lore));
         itemStack.setItemMeta(mapMeta);
         return itemStack;
-    }
-
-    /**
-     * Creates an {@link ItemStack} using {@link #createItemStack()} and adds it to a player's inventory.
-     *
-     * @param player the player to give the item to. Must not be {@code null}.
-     */
-    public void give(Player player) {
-        player.getInventory().addItem(createItemStack());
-        player.updateInventory();
     }
 }
