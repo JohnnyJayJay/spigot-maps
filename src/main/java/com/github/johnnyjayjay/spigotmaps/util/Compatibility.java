@@ -26,7 +26,9 @@ public final class Compatibility {
         int[] version = Arrays.stream(versionFinder.group().split("\\."))
                 .mapToInt(Integer::parseInt)
                 .toArray();
-        legacy = version[0] < 1 || version[1] < 13 || version[2] < 2;
+        legacy = !(version[0] > 1
+                || (version[0] == 1 && version[1] > 13)
+                || (version[0] == 1 && version[1] == 13 && version[2] >= 2));
 
         MethodType methodType = MethodType.methodType(legacy ? short.class : int.class);
         try {
