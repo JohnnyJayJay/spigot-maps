@@ -1,11 +1,11 @@
 plugins {
-    id 'java'
-    id 'maven'
-    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'java-library'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
 group 'com.github.johnnyjayjay'
-version '1.1'
+version '2.0'
 
 sourceCompatibility = 1.8
 
@@ -20,21 +20,21 @@ repositories {
 }
 
 dependencies {
-    compileOnly "org.spigotmc:spigot-api:1.14.1-R0.1-SNAPSHOT"
-    compile "com.madgag:animated-gif-lib:1.4"
+    compileOnly "org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT"
+    api "com.madgag:animated-gif-lib:1.4"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
+    classifier "sources"
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = "javadoc"
+    classifier "javadoc"
     from javadoc.destinationDir
 }
 
-shadowJar.classifier = "withDependencies"
+shadowJar.classifier "withDependencies"
 
 artifacts {
     archives sourcesJar

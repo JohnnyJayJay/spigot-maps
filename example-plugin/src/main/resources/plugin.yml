@@ -1,4 +1,4 @@
-name: SamplePlugin
+name: SpigotMapsExample
 version: 1.0-TEST
 main: com.github.johnnyjayjay.spigotmaps.example.SamplePlugin
 

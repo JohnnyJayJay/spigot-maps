@@ -20,11 +20,12 @@ repositories {
         url "https://jitpack.io"
     }
 	mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    compileOnly "org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT"
-    implementation "com.github.johnnyjayjay:spigot-maps:1.1"
+    compileOnly "org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT"
+    implementation "com.github.johnnyjayjay:spigot-maps:2.0"
 }
 
 tasks.withType(JavaCompile).each {
