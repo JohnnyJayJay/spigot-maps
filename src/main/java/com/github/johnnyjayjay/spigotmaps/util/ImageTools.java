@@ -155,9 +155,9 @@ public final class ImageTools {
         Dimension partSize = MINECRAFT_MAP_SIZE;
         int linearParts = image.getWidth() / partSize.width;
         List<BufferedImage> result = new ArrayList<>(linearParts * linearParts);
-        for (int i = 0; i < linearParts; i++) {
-            for (int j = 0; j < linearParts; j++) {
-                result.add(image.getSubimage(partSize.width * i, partSize.height * i, partSize.width, partSize.height));
+        for (int x = 0; x < linearParts; x++) {
+            for (int y = 0; y < linearParts; y++) {
+                result.add(image.getSubimage(partSize.width * x, partSize.height * y, partSize.width, partSize.height));
             }
         }
         return result.toArray(new BufferedImage[0]);
