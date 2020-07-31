@@ -4,9 +4,7 @@ import com.github.johnnyjayjay.spigotmaps.rendering.GifImage;
 import com.github.johnnyjayjay.spigotmaps.rendering.SimpleTextRenderer;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,7 +119,7 @@ public final class ImageTools {
             );
         }
 
-        int parts = newFrames[0].getImage().getWidth() / MINECRAFT_MAP_SIZE.width;
+        int parts = square(newFrames[0].getImage().getWidth() / MINECRAFT_MAP_SIZE.width);
         GifImage.Frame[][] dividedParts = new GifImage.Frame[parts][newFrames.length];
         for (int i = 0; i < newFrames.length; i++) {
             GifImage.Frame frame = newFrames[i];
@@ -131,6 +129,10 @@ public final class ImageTools {
             }
         }
         return Arrays.stream(dividedParts).map(Arrays::asList).map(GifImage::create).collect(Collectors.toList());
+    }
+
+    private static int square(int x) {
+        return x * x;
     }
 
     /**
