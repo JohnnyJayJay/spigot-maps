@@ -31,8 +31,8 @@ Then add `example-plugin-1.0-TEST.jar` (found in `build/libs`) to your plugins f
 ```xml
 <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+        <id>jcenter</id>
+        <url>https://jcenter.bintray.com/</url>
     </repository>
  </repositories>
 
@@ -40,7 +40,7 @@ Then add `example-plugin-1.0-TEST.jar` (found in `build/libs`) to your plugins f
     <dependency>
         <groupId>com.github.johnnyjayjay</groupId>
         <artifactId>spigot-maps</artifactId>
-        <version>2.0</version>
+        <version>2.1</version>
     </dependency>
 </dependencies>
 ```
@@ -49,13 +49,11 @@ Then add `example-plugin-1.0-TEST.jar` (found in `build/libs`) to your plugins f
 
 ```groovy
 repositories {
-    maven {
-        url "https://jitpack.io"
-    }
+    jcenter()
 }
 
 dependencies {
-    implementation "com.github.johnnyjayjay:spigot-maps:2.0"
+    implementation("com.github.johnnyjayjay:spigot-maps:2.1")
 }
 ```
 
