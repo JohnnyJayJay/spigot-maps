@@ -1,5 +1,6 @@
 package com.github.johnnyjayjay.spigotmaps;
 
+import com.github.johnnyjayjay.spigotmaps.util.Compatibility;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +31,7 @@ public final class InitializationListener implements Listener {
     @EventHandler
     public void onMapInitialize(MapInitializeEvent event) {
         MapView map = event.getMap();
-        List<MapRenderer> renderers = storage.provide(map.getId());
+        List<MapRenderer> renderers = storage.provide(Compatibility.getId(map));
         if (renderers != null) {
             map.getRenderers().forEach(map::removeRenderer);
             renderers.forEach(map::addRenderer);

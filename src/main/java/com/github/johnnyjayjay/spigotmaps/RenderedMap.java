@@ -1,5 +1,7 @@
 package com.github.johnnyjayjay.spigotmaps;
 
+import com.github.johnnyjayjay.spigotmaps.util.Compatibility;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -7,6 +9,9 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,11 +26,13 @@ public class RenderedMap {
 
     private final MapView view;
     private final MapStorage storage;
+    private final int mapViewId;
 
     private RenderedMap(MapView view, MapStorage storage) {
         this.view = view;
         this.storage = storage;
-        view.getRenderers().forEach((renderer) -> storage.store(view.getId(), renderer));
+        this.mapViewId = Compatibility.getId(view);
+        view.getRenderers().forEach((renderer) -> storage.store(mapViewId, renderer));
     }
 
     /**
@@ -106,7 +113,11 @@ public class RenderedMap {
     public ItemStack createItemStack(String displayName, String... lore) {
         ItemStack itemStack = new ItemStack(Material.MAP);
         MapMeta mapMeta = (MapMeta) itemStack.getItemMeta();
-        mapMeta.setMapView(view);
+        if (Compatibility.isLegacy()) {
+            itemStack.setDurability((short) mapViewId);
+        } else {
+            mapMeta.setMapView(view);
+        }
         mapMeta.setDisplayName(displayName);
         mapMeta.setLore(lore.length == 0 ? null : Arrays.asList(lore));
         itemStack.setItemMeta(mapMeta);

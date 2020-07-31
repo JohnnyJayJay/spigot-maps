@@ -1,6 +1,7 @@
 package com.github.johnnyjayjay.spigotmaps.rendering;
 
 import com.github.johnnyjayjay.spigotmaps.util.Checks;
+import com.github.johnnyjayjay.spigotmaps.util.Compatibility;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
@@ -19,11 +20,13 @@ public class RenderContext {
     private final MapView mapView;
     private final MapCanvas mapCanvas;
     private final Player player;
+    private final int mapViewId;
 
     private RenderContext(MapView mapView, MapCanvas mapCanvas, Player player) {
         this.mapView = mapView;
         this.mapCanvas = mapCanvas;
         this.player = player;
+        this.mapViewId = Compatibility.getId(mapView);
     }
 
     /**
@@ -68,12 +71,12 @@ public class RenderContext {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RenderContext that = (RenderContext) o;
-        return mapView.getId() == that.mapView.getId()
+        return mapViewId == that.mapViewId
                 && Objects.equals(player, that.player);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mapView.getId(), player);
+        return Objects.hash(mapViewId, player);
     }
 }

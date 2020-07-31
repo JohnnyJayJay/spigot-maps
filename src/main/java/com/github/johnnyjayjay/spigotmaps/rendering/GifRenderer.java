@@ -67,6 +67,15 @@ public class GifRenderer extends AbstractMapRenderer {
     }
 
     /**
+     * Returns the {@link GifImage} used by this renderer.
+     *
+     * @return the image
+     */
+    public GifImage getImage() {
+        return image;
+    }
+
+    /**
      * Returns how often the gif will still repeat itself or {@link #REPEAT_FOREVER} if it repeats indefinitely.
      */
     public int getToRepeat() {
@@ -89,6 +98,18 @@ public class GifRenderer extends AbstractMapRenderer {
     public void setFrame(int frame) {
         Checks.checkBounds(frame, 0, image.getFrameCount(), "Frame index");
         this.currentFrame = frame;
+    }
+
+    /**
+     * Creates a new {@link GifRenderer} that renders a specific gif for the specified players
+     * or everyone if none are specified.
+     *
+     * @param image   the gif to render.
+     * @param players the players to render for. Must not be {@code null}.
+     * @return a never-null instance of {@link GifRenderer}.
+     */
+    public static GifRenderer create(GifImage image, Player... players) {
+        return builder().gif(image).addPlayers(players).build();
     }
 
     /**
