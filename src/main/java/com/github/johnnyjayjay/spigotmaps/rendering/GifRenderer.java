@@ -101,6 +101,18 @@ public class GifRenderer extends AbstractMapRenderer {
     }
 
     /**
+     * Creates a new {@link GifRenderer} that renders a specific gif for the specified players
+     * or everyone if none are specified.
+     *
+     * @param image   the gif to render.
+     * @param players the players to render for. Must not be {@code null}.
+     * @return a never-null instance of {@link GifRenderer}.
+     */
+    public static GifRenderer create(GifImage image, Player... players) {
+        return builder().gif(image).addPlayers(players).build();
+    }
+
+    /**
      * Creates and returns a new instance of this class' {@link Builder}.
      */
     public static Builder builder() {
