@@ -17,15 +17,6 @@ import java.net.URL;
 public class SamplePlugin extends JavaPlugin {
 
     @Override
-    public void onEnable() {
-        getCommand("image");
-        getCommand("text");
-        getCommand("atext");
-        getCommand("gif");
-        getCommand("bigimage");
-    }
-
-    @Override
     public boolean onCommand(CommandSender sender, Command command, String name, String[] args) {
         if (!(sender instanceof Player))
             return false;
