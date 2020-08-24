@@ -15,3 +15,9 @@ commands:
     gif:
         description: Generates a map with the gif you provide on it.
         usage: /gif [url]
+    bigimage:
+        description: Generates multiple maps
+        usage: /bigimage [url]
+    biggif:
+        description: Generates multiple gif maps
+        usage: /bigimage [url]

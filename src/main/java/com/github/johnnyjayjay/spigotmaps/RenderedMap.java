@@ -111,7 +111,7 @@ public class RenderedMap {
      * @return a new ItemStack.
      */
     public ItemStack createItemStack(String displayName, String... lore) {
-        ItemStack itemStack = new ItemStack(Material.MAP);
+        ItemStack itemStack = new ItemStack(Compatibility.isLegacy() ? Material.MAP : Material.FILLED_MAP);
         MapMeta mapMeta = (MapMeta) itemStack.getItemMeta();
         if (Compatibility.isLegacy()) {
             itemStack.setDurability((short) mapViewId);

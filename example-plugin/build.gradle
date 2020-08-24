@@ -16,19 +16,18 @@ repositories {
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
-    maven {
-        url "https://jitpack.io"
-    }
+	jcenter()
 	mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT"
-    implementation "com.github.johnnyjayjay:spigot-maps:2.0"
+    implementation "com.github.johnnyjayjay:spigot-maps:2.1"
 }
 
 tasks.withType(JavaCompile).each {
     it.options.compilerArgs.add('--enable-preview')
 }
+
+compileJava.options.encoding "UTF-8"
 
