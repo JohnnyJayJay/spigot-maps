@@ -2,11 +2,10 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
-    id 'com.jfrog.bintray' version '1.8.4'
 }
 
 group 'com.github.johnnyjayjay'
-version '2.1.1'
+version '2.1.2'
 
 sourceCompatibility = 1.8
 
@@ -43,56 +42,26 @@ artifacts {
     archives shadowJar
 }
 
-bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
-    publications = ["SpigotMaps"]
-    pkg {
-        version {
-            name = project.version
-            released = new Date()
-        }
-        repo = "spigot-maps"
-        name = "spigot-maps"
-        vcsUrl = "https://github.com/johnnyjayjay/spigot-maps.git"
-    }
-    publish = true
-}
-
-def pomConfig = {
-    licenses {
-        license {
-            name "GNU Lesser General Public License, Version 3"
-            url "https://www.gnu.org/licenses/lgpl-3.0.html"
-        }
-    }
-    developers {
-        developer {
-            id "johnnyjayjay"
-            email "johnnyjayjay02@gmail.com"
-        }
-    }
-    scm {
-        url "https://github.com/johnnyjayjay/spigot-maps"
-    }
-}
-
 publishing {
-    publications {
-        SpigotMaps(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-            groupId "com.github.johnnyjayjay"
-            artifactId "spigot-maps"
-            version version.toString()
-            pom.withXml {
-                def root = asNode()
-                root.appendNode("name", "spigot-maps")
-                root.appendNode("description", "A library to simplify the use of customised maps in Spigot")
-                root.appendNode("url", "https://github.com/johnnyjayjay/spigot-maps/")
-                root.children().last() + pomConfig
+    repositories {
+        maven {
+            def repo = "https://repo.devcord.club"
+            def releaseRepo = "$repo/releases"
+            def snapshotRepo = "$repo/snapshots"
+            url = uri(version.toString().endsWith("SNAPSHOT") ? snapshotRepo : releaseRepo)
+
+            credentials {
+                username devcordUsername
+                password devcordPassword
             }
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            artifact(javadocJar)
+            artifact(sourcesJar)
+            from components.java
         }
     }
 }
