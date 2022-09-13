@@ -19,7 +19,7 @@ public final class Compatibility {
     private static final MethodHandle getId;
 
     static {
-        Matcher versionFinder = Pattern.compile("(?<=\\(MC: )\\d+\\.\\d+\\.\\d+(?=\\))").matcher(Bukkit.getVersion());
+        Matcher versionFinder = Pattern.compile("(?<=\\(MC: )\\d+\\.\\d+(\\.\\d+)?(?=\\))").matcher(Bukkit.getVersion());
         if (!versionFinder.find()) {
             throw new AssertionError("Could not find MC version in Bukkit.getVersion()");
         }
@@ -28,7 +28,7 @@ public final class Compatibility {
                 .toArray();
         legacy = !(version[0] > 1
                 || (version[0] == 1 && version[1] > 13)
-                || (version[0] == 1 && version[1] == 13 && version[2] >= 2));
+                || (version.length > 2 && version[0] == 1 && version[1] == 13 && version[2] >= 2));
 
         MethodType methodType = MethodType.methodType(legacy ? short.class : int.class);
         try {

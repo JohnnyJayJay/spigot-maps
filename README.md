@@ -27,8 +27,7 @@ Then add `example-plugin-1.0-TEST.jar` (found in `build/libs`) to your plugins f
 ```xml
 <repositories>
     <repository>
-        <id>jcenter</id>
-        <url>https://jcenter.bintray.com/</url>
+        <url>https://repo.devcord.club/releases</url>
     </repository>
  </repositories>
 
@@ -36,7 +35,7 @@ Then add `example-plugin-1.0-TEST.jar` (found in `build/libs`) to your plugins f
     <dependency>
         <groupId>com.github.johnnyjayjay</groupId>
         <artifactId>spigot-maps</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2</version>
     </dependency>
 </dependencies>
 ```
@@ -45,11 +44,11 @@ Then add `example-plugin-1.0-TEST.jar` (found in `build/libs`) to your plugins f
 
 ```groovy
 repositories {
-    jcenter()
+    maven("https://repo.devcord.club/releases")
 }
 
 dependencies {
-    implementation("com.github.johnnyjayjay:spigot-maps:2.1.1")
+    implementation("com.github.johnnyjayjay:spigot-maps:2.1.2")
 }
 ```
 
